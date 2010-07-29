@@ -1,69 +1,66 @@
-﻿<Fluent:RibbonWindow x:Class="WpfOpenTK.MainWindow"
+﻿<Window x:Class="WpfOpenTK.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
-    Title="Fluent.Sample.Mvvm" 
-    Width="701" 
-    Height="318" 
-    Background="#FFEBEDF0">
+    Title="Fluent.Sample.Mvvm"
+    Width="701"
+    Height="318"
+    Background="#FFEBEDF0"
+	>
 
-    <DockPanel LastChildFill="False">
-        
-        <!--View & Edit Current Persone Details-->
-        <Grid>
+	<DockPanel LastChildFill="False">
 
-            <!--<TabControl Name="tabControl" >				
+		<!--View & Edit Current Persone Details-->
+		<Grid>
+
+			<!--<TabControl Name="tabControl" >
             </TabControl>-->
-                    
-                        
-        </Grid>
 
-        <Fluent:Ribbon DockPanel.Dock="Top" >
-            <!--Quick Access Toolbar Items-->
-            <Fluent:Ribbon.QuickAccessItems>
-                <Fluent:QuickAccessMenuItem Target="{Binding ElementName=buttonGreen}"/>
-            </Fluent:Ribbon.QuickAccessItems>
+		</Grid>
 
-            <!--Tabs-->
-            <Fluent:RibbonTabItem Header="Tab" ReduceOrder="(P),(P),(P),(P),(P)">
-                <Fluent:RibbonGroupBox Header="Add / Remove">
+		<Fluent:Ribbon DockPanel.Dock="Top" >
+			<!--Quick Access Toolbar Items-->
+			<Fluent:Ribbon.QuickAccessItems>
+				<Fluent:QuickAccessMenuItem Target="{Binding ElementName=buttonGreen}"/>
+			</Fluent:Ribbon.QuickAccessItems>
 
-                </Fluent:RibbonGroupBox>
+			<!--Tabs-->
+			<Fluent:RibbonTabItem Header="Tab" ReduceOrder="(P),(P),(P),(P),(P)">
+				<Fluent:RibbonGroupBox Header="Add / Remove">
 
-                <!--Gallery with all persons-->
-                <Fluent:RibbonGroupBox Header="All Persons" Name="P">
-                    <Fluent:InRibbonGallery ItemWidth="100" ItemHeight="56" ResizeMode="Both"
+				</Fluent:RibbonGroupBox>
+
+				<!--Gallery with all persons-->
+				<Fluent:RibbonGroupBox Header="All Persons" Name="P">
+					<Fluent:InRibbonGallery ItemWidth="100" ItemHeight="56" ResizeMode="Both"
                                       MinItemsInRow="2" MaxItemsInRow="7"
                                       ItemTemplate="{DynamicResource PersoneCardTemplate}"
-                                      ItemsSource="{Binding Persons}" 
+                                      ItemsSource="{Binding Persons}"
                                       SelectedItem="{Binding Current}"/>
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
+				</Fluent:RibbonGroupBox>
+			</Fluent:RibbonTabItem>
 
-            <!--Backstage Items-->
-            <Fluent:Ribbon.BackstageItems>
+			<!--Backstage Items-->
+			<Fluent:Ribbon.BackstageItems>
 
-            </Fluent:Ribbon.BackstageItems>
-        </Fluent:Ribbon>
+			</Fluent:Ribbon.BackstageItems>
+		</Fluent:Ribbon>
 
-        <ad:DockingManager x:Name="dockingManager" Grid.Row="1">
-            <ad:ResizingPanel Orientation="Horizontal">
-            </ad:ResizingPanel>
+		<ad:DockingManager x:Name="dockingManager" Grid.Row="1">
+			<ad:ResizingPanel Orientation="Horizontal">
+			</ad:ResizingPanel>
 
-		 
-			
-		 
 		</ad:DockingManager>
 
-        <StatusBar Name="statusBar"  DockPanel.Dock="Bottom" BorderBrush="SteelBlue" BorderThickness="0,1,0,0">
-            <StatusBarItem DockPanel.Dock="Right" HorizontalAlignment="Right">
-                <StackPanel Margin="5" Orientation="Horizontal">
-                    <TextBlock Margin="5,0"  Text="{Binding ElementName=rwm, Path=GetString}" />
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>
+		<StatusBar Name="statusBar"  DockPanel.Dock="Bottom" BorderBrush="SteelBlue" BorderThickness="0,1,0,0">
+			<StatusBarItem DockPanel.Dock="Right" HorizontalAlignment="Right">
+				<StackPanel Margin="5" Orientation="Horizontal">
+					<TextBlock Margin="5,0"  Text="{Binding ElementName=rwm, Path=GetString}" />
+				</StackPanel>
+			</StatusBarItem>
+		</StatusBar>
 
-    </DockPanel>
+	</DockPanel>
 
-</Fluent:RibbonWindow>
+</Window>

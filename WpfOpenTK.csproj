@@ -19,6 +19,8 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -33,8 +35,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,31 +72,10 @@
     <Reference Include="AvalonDock.Themes">
       <HintPath>C:\Program Files (x86)\WPF_controls\AvalonDock 1.3 (Build 3384)\AvalonDock.Themes.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.CV, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libemgucv-2.1.0.779-win64\libemgucv-2.1.0.779-win64\bin\Emgu.CV.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.DebuggerVisualizers, Version=2.1.0.779, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libemgucv-2.1.0.779-win64\libemgucv-2.1.0.779-win64\bin\Emgu.CV.DebuggerVisualizers.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.ML, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libemgucv-2.1.0.779-win64\libemgucv-2.1.0.779-win64\bin\Emgu.CV.ML.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.CV.UI, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libemgucv-2.1.0.779-win64\libemgucv-2.1.0.779-win64\bin\Emgu.CV.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Emgu.Util, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libemgucv-2.1.0.779-win64\libemgucv-2.1.0.779-win64\bin\Emgu.Util.dll</HintPath>
-    </Reference>
+    <Reference Include="Emgu.CV, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
+    <Reference Include="Emgu.Util, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Fluent">
       <HintPath>DLL-Libraries\Fluent.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>DLL-Libraries\log4net.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="OpenTK.GLControl, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
@@ -150,7 +129,7 @@
     <Compile Include="User Controls\ModelOrientationControl.xaml.cs">
       <DependentUpon>ModelOrientationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VolumetricData.cs" />
+    <Compile Include="Data Layer\VolumetricData.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -161,7 +140,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IRenderingDataset.cs" />
+    <Compile Include="Data Layer\IRenderingDataset.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -236,9 +215,6 @@
     <None Include="OpenGL\Data\Shaders\simple.frag" />
     <None Include="OpenGL\Data\Shaders\vertex.shader" />
     <None Include="Document\Class Model.cd" />
-    <None Include="Data Layer\Libraries\OpenTK.dll.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -253,12 +229,6 @@
     <None Include="Document\WpfOpenTK.vpp" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data Layer\Libraries\OpenTK.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data Layer\Libraries\OpenTK.GLControl.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Libraries\AvalonDock.Themes.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -275,9 +245,6 @@
     <Content Include="Libraries\highgui210.dll" />
     <Content Include="Libraries\log4net.dll" />
     <Resource Include="Document\TODO.txt" />
-    <Resource Include="Data Layer\Libraries\OpenTK.GLControl.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
