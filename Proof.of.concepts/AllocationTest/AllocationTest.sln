@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllocationTest", "AllocationTest.csproj", "{44BA2228-04B6-438B-BD6A-98CFAC68CB25}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44BA2228-04B6-438B-BD6A-98CFAC68CB25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44BA2228-04B6-438B-BD6A-98CFAC68CB25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44BA2228-04B6-438B-BD6A-98CFAC68CB25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44BA2228-04B6-438B-BD6A-98CFAC68CB25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		AMDCaProjectFile = E:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine sharp\AllocationTest\CodeAnalyst\AllocationTest.caw
+	EndGlobalSection
+EndGlobal
