@@ -1,22 +1,37 @@
-﻿uniform	sampler2D backBuffer;
+/*vec3 L = vec3(0,1,1);
+		float s = dot(color_sample.xyz, L );
+		color_sample.rgb = s * color_sample.rgb + 0.1*color_sample.rgb;
+		color_sample.rgb *= color_sample.a;
+*/	
+
+uniform	sampler2D backBuffer;
 uniform sampler2D frontBuffer;
 uniform sampler3D volume;
 
 varying vec2 TexCoord0;
 varying vec2 TexCoord1;
 
-//vec3 start = texture2D(frontBuffer,TexCoord1).xyz;
-start = gl_FragColor.xyz;
+vec3 start = texture2D( frontBuffer,TexCoord1).xyz;
+vec3 stop  = texture2D( backBuffer ,TexCoord0).xyz;
+//vec3 stop = gl_Color.xyz;
 
-vec3 dir   = ( texture2D( backBuffer,TexCoord0) - texture2D( frontBuffer,TexCoord1)).xyz;
+float asdf = 1;
+float AlphaThreshold = 0.002;
+
+
+//vec3 dir   = ( texture2D( backBuffer,TexCoord0) - texture2D( frontBuffer,TexCoord1)).xyz;
+vec3 dir   =  stop - start;
 vec3  norm_dir = normalize(dir);
 
 vec3 vec = start;
 
 float len = length(dir.xyz);
-float delta = 0.001; // 0.005;
+float delta = 0.0005 * 1; // 0.005;
+
+
 vec3  delta_dir = norm_dir * delta;
-float delta_dir_len = length(delta_dir);
+
+//float delta_dir_len = length(delta_dir);
 
 vec4 color_sample = vec4(0,0,0,0);
 vec3 col_acc = vec3(0,0,0);
@@ -34,231 +49,238 @@ float alpha = 0.0;
 
 float depthT = -1.0;
 
+float distanceUntilHit = 0;
+
+float k = 64.0 ;
+vec3 vVoxelStepsize = vec3(1.0/k,1.0/k,1.0/k);
+
+vec3 Lighting(vec3 vPosition, vec3 vNormal, vec3 vLightAmbient, vec3 vLightDiffuse, vec3 vLightSpecular, vec3 voxelColor) {
+	vec3 vViewDir    = normalize(vec3(0.0,0.0,0.0)-vPosition);
+	vec3 vReflection = normalize(reflect(vViewDir, vNormal));
+	
+	vec3 vLightDir = vec3(1.0,1.0,1.0);
+	
+	return 1*vLightAmbient + 
+	//1*vLightDiffuse*max(dot(vNormal, -vLightDir),0.0)*voxelColor.rgb+
+	0.0*vLightDiffuse  * max(dot(vNormal, -vLightDir),0.0) +  
+	0.0*vLightSpecular * pow(max(dot(vReflection, vLightDir),0.0),3.00);
+}
+
+vec3 ComputeNormal(vec3 vHitPosTex) { 
+
+	float fVolumValXp = texture3D(volume, vHitPosTex+vec3(+vVoxelStepsize.x,0,0)).x;
+	float fVolumValXm = texture3D(volume, vHitPosTex+vec3(-vVoxelStepsize.x,0,0)).x;
+	if ((vHitPosTex.x - vVoxelStepsize.x ) < 0.0)
+		fVolumValXm = fVolumValXp;
+	if ((vHitPosTex.x + vVoxelStepsize.x ) > 1.0)
+		fVolumValXp = fVolumValXm;
+	
+	
+	float fVolumValYp = texture3D(volume, vHitPosTex+vec3(0,-vVoxelStepsize.y,0)).x;
+	float fVolumValYm = texture3D(volume, vHitPosTex+vec3(0,+vVoxelStepsize.y,0)).x;
+	if ((vHitPosTex.y - vVoxelStepsize.y ) < 0.0)
+		fVolumValYm = fVolumValYp;
+	if ((vHitPosTex.y + vVoxelStepsize.y ) > 1.0)
+		fVolumValYm = fVolumValYp;
+	
+	float fVolumValZp = texture3D(volume, vHitPosTex+vec3(0,0,+vVoxelStepsize.z)).x;
+	float fVolumValZm = texture3D(volume, vHitPosTex+vec3(0,0,-vVoxelStepsize.z)).x;
+	if ((vHitPosTex.z - vVoxelStepsize.z ) < 0.0)
+		fVolumValZm = fVolumValZp;
+	if ((vHitPosTex.z + vVoxelStepsize.z ) > 1.0)
+		fVolumValZm = fVolumValZp;
+	
+	
+	//vec3  vGradient  = vec3(fVolumValXm-fVolumValXp, fVolumValYp-fVolumValYm, fVolumValZm-fVolumValZp); 
+	vec3  vGradient  = vec3((fVolumValXm-fVolumValXp), (fVolumValYp-fVolumValYm), (fVolumValZm-fVolumValZp)); 
+	
+	vec3 vNormal     = gl_NormalMatrix * vGradient;
+	
+	float l = length(vNormal); 
+	if (l>0.0) vNormal /= l; // secure normalization
+	
+	return vNormal;
+}
+
+
+
+vec4 Classify (vec4 color_sample) {
+
+	float bulhar = 255.0;
+	float prah = 100.0 / bulhar;  //40 
+	float add =  60.0 / bulhar;
+	vec4 color = vec4(0);
+	
+	if (color_sample.r >= prah) 
+	{
+		float alpha =  1.0/155.0 * color_sample.r*255 - 100.0/155.0;
+		color = vec4(0.89,0.84,0.89,alpha/20);		
+	}
+	else if ((color_sample.r > 50/bulhar) && (color_sample.r < 60/bulhar)) 
+	{
+		float D = 50;
+		float H = 100;
+		float q = D / (D-H);
+		float k = -q / D;
+		
+		float alpha =  k * color_sample.r*255 + q;
+		
+		color = vec4(0.25,0.87,0.98, alpha/10);		
+	}
+	else if ( (color_sample.r <= (prah)))
+		color = vec4(0.087,0.099,0.87,0.000);
+	
+	
+	if (color.a < AlphaThreshold)
+	{
+		delta_dir = norm_dir * 1 * delta;
+		asdf = 0;
+	}
+	else
+	{
+		delta_dir = norm_dir * delta;
+		asdf = 0;
+	}
+	
+	//delta_dir = norm_dir * delta;
+	
+	return color;
+}
+
+vec4 color_sample_1 = vec4(0,0,0,0);
+vec4 color_sample_2 = vec4(0,0,0,0);
+vec4 color_sample_3 = vec4(0,0,0,0);
+vec4 color_sample_4 = vec4(0,0,0,0);
+
 void main()
 {
-
-	//if ( texture2D(frontBuffer,TexCoord0) == texture2D(backBuffer,TextCoord0))
-	//discard;
-
-	/*
-	if ( ( texture2D(frontBuffer,TexCoord0).r == 1.00) &&
-		 ( texture2D(frontBuffer,TexCoord0).g == 1.00) &&
-		 ( texture2D(frontBuffer,TexCoord0).b == 1.00)
-		)
-	discard;*/
+	vec4 dst = vec4(0.0, 0.0, 0.0, 0);
 	
-		
+	vec4 dst_1 = vec4(0, 0, 0, 0);
+	vec4 dst_2 = vec4(0, 0, 0, 0);
+	vec4 dst_3 = vec4(0, 0, 0, 0);
+	vec4 dst_4 = vec4(0, 0, 0, 0);
+	
 	for (int i = 0; i < 1/delta + 1; i++)
 	{
-
-		color_sample = texture3D(volume,vec);
-						
-		// postclassification
-		/*
-		if ((color_sample.r >= 33.37/255.0) && (color_sample.r <= 43/255.0))
-			color_sample = vec4(0.0,0.25,0.0,0.1);
-		else if ((color_sample.r >= 92.37/255.0) && (color_sample.r <= 120/255.0))
-			{
-			color_sample = vec4(0.0,0.0,0.8,0.2);
-			}
-		else if ((color_sample.r >= 196.0/255.0) && (color_sample.r <= 243/255.0))
-			color_sample = vec4(0.5,0.0,0.0,0.5);
-		else color_sample = vec4(0,0,0,0);
-		*/
 		
-		/*if ((color_sample.r >= 0.3) && (color_sample.r <= 0.34))
-			color_sample = vec4(0.0,0.8,0.0,0.4);
-		else color_sample = vec4(0);
-		*/
-		/*else if ((color_sample.r >= 0.35) && (color_sample.r <= 0.4))
-			color_sample = vec4(0.0,0.5,0.2,0.2);
-		else if ((color_sample.r >= 0.4) && (color_sample.r <= 0.5))
-			color_sample = vec4(0.6,0.5,0.2,0.3);
-		*/
-		/*
-				// postclassification
-		if ((color_sample.r >= 0.0) && (color_sample.r <= 0.005))
-			color_sample = vec4(0.0,0.25,0.8,0.00);
-		else if ((color_sample.r >= 0.005) && (color_sample.r <= 0.1))
-			color_sample = vec4(0.8,0.8,0.1,0.00);
-		else if ((color_sample.r >= 0.1) && (color_sample.r <= 0.15))
-			color_sample = vec4(0.8,0.0,0.0,0.01);
-		else if ((color_sample.r >= 0.15) && (color_sample.r <= 0.2))
-			color_sample = vec4(0.0,0.8,0.8,0.03);
-		else if ((color_sample.r >= 0.2) && (color_sample.r <= 0.3))
-			color_sample = vec4(0.0,0.9,0.8,0.02);
-		else if ((color_sample.r >= 0.3) && (color_sample.r <= 0.32))
-			color_sample = vec4(0.0,0.99,0.0,0.01);
-		else if ((color_sample.r >= 0.32) && (color_sample.r <= 0.36))
-			color_sample = vec4(0.7,0.0,0.5,0.00);
-		//else if ((color_sample.r >= 0.36) && (color_sample.r <= 0.46))
-		//	color_sample = vec4(0.75,0.82,0.91,0.74);
-		*/
+		// get sample
+		color_sample = texture3D(volume,vec);		
 		
-	/*	if ((color_sample.r >= 0.0) && (color_sample.r <= 0.1))
-			color_sample = vec4(0.0,0.25,0.0,0.01);
-		else if ((color_sample.r >= 0.1) && (color_sample.r <= 0.32))
-			color_sample = vec4(0.0,0.25,0.8,0.05);
-		else if ((color_sample.r >= 0.4) && (color_sample.r <= 0.95))
-			color_sample = vec4(0.8,0.0,0.8,0.4);
-*/
-
-
-		// skull
-		float bulhar = 255.0;
-		float prah = 40.0 /bulhar;
-		float add =  60.0 / bulhar;
-
-		if ((color_sample.r >= prah) && (color_sample.r <= (prah+0.3)))
-			{
-			float ttt =  2.0*(0.0134*color_sample.r*250-0.3414);
-			color_sample = vec4(0.9,0.9,0.8,ttt);
-			}
-		else if ((color_sample.r >= 80.0/bulhar) && (color_sample.r <= (100.0/bulhar)))
-			color_sample = vec4(0.94234,0.98,0.890,0.9735);
-		else 
-			color_sample = vec4(0);
+		// post classify	
+		
+		color_sample = Classify(color_sample);
+		
+		color_sample.a *= exp(1/length(vec));
 		
 		
-		//else
-		//color_sample = vec4(1.0,1.0,1.0,0.8);
-			
-		
-	 
-			
-		alpha_sample = 1.0*color_sample.a * delta;
-				
-		//alpha_acc += 1*alpha_sample;
-		alpha_acc += ( 1.0 - alpha_acc)*alpha_sample;
-		alpha_acc *=   1.0;
-		
-		// save first hit ray parameter for depth value calculation
-			if (depthT < 0.0 && alpha_acc > 0.0)
-				depthT = length_acc;
-			 
-				
 		vec += delta_dir;
-		 
-				
 		
 		
-		length_acc += delta_dir_len;
-
-		col_acc   += (1.0 - alpha_acc) * color_sample.rgb * alpha_sample  ; // 3 * 1/2*exp(vec);
-		//col_acc += color_sample.rgb*alpha_sample.rgb;
+		if (dst.a >= 0.999f)
+		break;
 		
-		alpha_old = alpha_new;
-		alpha_new = alpha_acc;
-		
-		//if (abs(alpha_new-alpha_old) > 0.1)
-		//alpha_acc *= 1.3;
-		
-		// doplnit ukoncovanie na zaklade pomerov v rgb.
-		
-		// if ((alpha_acc >= 0.1) && (length(vec) < 0.05))
-		// {
-		//	alpha_acc = 0;
-		//	col_acc = vec3(0.9,0,0);
-		//  }
-		
-		// toto treba
-		//gl_FragDepth = 1.0 - 1.5 * depthT / len;
-		
-		//gl_FragDepth = 1.0 - 0.5*depthT / len;
-		
-		if ((length_acc >= len)  || (alpha_acc >= 1.0))
-			{
-			alpha_acc = 1.0;
-			//gl_FragDepth = 0.0;
-			break;
-			}
-			
-		
-	}
-	/*
-	if (length(col_acc) < 0.005)
-	col_acc = vec3(1.0,0,0);
-	else
-	*/
-	
-	//if ((alpha_acc) < 0.005	)
-	//	gl_FragColor = vec4(1,1,1,1);
-	//else 
-	
-	if (alpha_acc < 0.00001);
-	{
-	//col_acc = vec3(0,0,0.5);
-	//alpha_acc = 0.5;
-	}
-	
-	col_acc = 50 * (col_acc);
- 
-	//gl_FragDepth = 1.0 - 1.0 / length_acc;
-	//vec4(length_acc,length_acc,length_acc,0.8);
-	
-	// calculate depth value from ray parameter
-	// gl_FragDepth = 1.0 - 1*depthT / len;
-	
-	/*if (depthT >= 0.0)
-		gl_FragDepth = calculateDepthValue(depthT/tend, textureLookup2Dnormalized(entryPointsDepth_, entryParameters_, p).z,
-														textureLookup2Dnormalized(exitPointsDepth_, exitParameters_, p).z);
-	*/
-														
-	
-	gl_FragColor = vec4(col_acc.r,col_acc.g,col_acc.b,alpha_acc);	 
-	//gl_FragDepth *= 1.2;
-	
-	//gl_FragDepth = gl_FragCoord.z;
-	if (gl_FragDepth > 0.0)
-	{
-		gl_FragColor = vec4(gl_FragDepth,0.0,0,gl_FragDepth);
-		gl_FragColor = vec4(col_acc.r,col_acc.g,col_acc.b,alpha_acc);	 
-	}
-	else
+	/*	if (color_sample.a > AlphaThreshold && asdf == 1)
 		{
-		//gl_FragColor = vec4(0.8,1,0.8,0.89);
-		//gl_FragDepth = 0;
+			vec	-=	norm_dir * 1 * delta;
+			vec +=  norm_dir * delta;
 		}
-		//gl_FragColor = vec4(col_acc.r,col_acc.g,col_acc.b,alpha_acc);
-
-
-	//gl_FragColor = vec4(0.3,0,0.25,0.1);
-	//gl_FragDepth = 0.2 - depthT/len;
-	 
+	*/
+		
+		// ---------------- classification end ------------------
+		
+		// ---------------- color optical model -----------------
+		//vec3 L = vec3(0.25,0.35,0.25);
+		//float s = dot ( color_sample.rgb, L);
+		
+		//color_sample.rgb = 0.5* (s * color_sample.rgb + color_sample.rgb + 0.02);
+		
+		vec3 normal = ComputeNormal(vec);
+		//float gradient = 0.8*dot(normal,normal);
+		//color_sample.rgb += gradient;
+		
+		vec3 vLightAmbient  = vec3(0.9,0.9,0.9);
+		vec3 vLightDiffuse  = vec3(0.0,0.0,1.0);
+		vec3 vLightSpecular = vec3(0.0,1.0,0.0);
+		
+		//color_sample.rgb += Lighting(vec,  normal,  vLightAmbient,  vLightDiffuse,  vLightSpecular);
+		
+		float gradient = 1.0 * (normal.r*normal.r + normal.g*normal.g + normal.b*normal.b);
+		//color_sample.rgb += vec3(gradient);
+		//color_sample.rgb /= 3.0;
+		
+		vec3 LightDir = vec3(1.0,1.0,1.0);
+		//color_sample.rgb += Lighting(vec,  normal,  vLightAmbient,  vLightDiffuse,  vLightSpecular, color_sample.rgb);
+		//color_sample.rgb = (vec3((1-normal.r,1-normal.r,1-normal.r)));
+		color_sample.rgb *= color_sample.a;
+		
+		color_sample.a	 *= 1.0;
+		
+		dst.rgb  = ( 1.0 - dst.a ) * color_sample.a * color_sample.rgb + dst.rgb;
+		dst.a    = ( 1.0 - dst.a ) * color_sample.a                    + dst.a;
+		
+		//dst.a *= 1.01;
+		
+		if ((color_sample.a > 0.001) && distanceUntilHit == 0)
+			distanceUntilHit = length(vec);
+		
+		
+		// ----------------- early stopping criteria ------------
+		
+		if (vec.x > 1.0f || vec.y > 1.0f || vec.z > 1.0f )
+		break;
+	}
 	
-			
-	//gl_FragColor = vec4(gl_FragDepth,0,0,1);
-	
-	//gl_DepthColor = 4;
-	//gl_FragColor = vec4(col_acc.r,0,0,alpha_acc);
-
-	gl_FragColor = vec4(0.5,0.2,0.4,0.8);
-	// gl_FragColor = texture2D(backBuffer,TexCoord0);
-}
-	
-
-
-/*uniform	sampler2D backBuffer;
-uniform sampler2D frontBuffer;
-uniform sampler3D volume;
-
-varying vec2 TexCoord0;
-varying vec2 TexCoord1;
-
-vec3 start = texture2D(frontBuffer,TexCoord1).xyz;
-vec3 dir   = ( texture2D( backBuffer,TexCoord0) - texture2D( frontBuffer,TexCoord1)).xyz;
-vec3 norm_dir = normalize(dir);
-
-vec3 vec = start+vec3(0.1);
-vec4 color_sample = vec4(0,0,0,0);
-
-vec4 a = vec4(0.1,0.1,0.1,0.5);
-				
-void main()
-{
-	  color_sample = texture3D(volume,vec);
-	
-	  gl_FragColor = 1*vec4(dir,0.5) +  0.2*color_sample;
-	 //gl_FragColor = vec4(frontBuffer,1);
-}
+	//dst = 0.75*dst + 1.0/4*( dst_1 + dst_2 + dst_3 + dst_4);
+	/*	float K = 0.004;
+	if (dst.r < K && dst.g < K && dst.b < K)
+		gl_FragColor =  vec4(0.7);	 
+	else
 */
+	if (dst.a > 0.0001)
+		gl_FragColor = 20 * vec4(dst.r,dst.g,dst.b,dst.a);	 
+	else
+	{
+		dst.rgb = mix(dst.rgb,vec3(0.96,0.76,0.85),0.2);
+		gl_FragColor =  vec4(dst.r,dst.g,dst.b,dst.a);
+	}
+	
+	//gl_FragColor = vec4(distanceUntilHit,0,0,0.5);
+	
+}
+
+/*
+"Fragment shader failed to compile with the following errors:\n
+ERROR: 0:65: error(#143) Undeclared identifier float4\n
+ERROR: 0:65: error(#132) Syntax error: 'dst' parse error\n
+ERROR: error(#273) 2 compilation errors.  No code generated\n\n"
+
+*/
+
+
+
+
+/*
+		color_sample_1.rgb *= color_sample_1.a;
+		color_sample_2.rgb *= color_sample_2.a;
+		color_sample_3.rgb *= color_sample_3.a;
+		color_sample_4.rgb *= color_sample_4.a;
+				
+		
+		dst_1.rgb  = ( 1.0 - dst_1.a ) * color_sample_1.a * color_sample_1.rgb + dst_1.rgb;
+		dst_1.a    = ( 1.0 - dst_1.a ) * color_sample_1.a                 	   + dst_1.a;
+		
+		dst_2.rgb  = ( 1.0 - dst_2.a ) * color_sample_2.a * color_sample_2.rgb + dst_2.rgb;
+		dst_2.a    = ( 1.0 - dst_2.a ) * color_sample_2.a                 	   + dst_1.a;
+		
+		dst_3.rgb  = ( 1.0 - dst_3.a ) * color_sample_3.a * color_sample_3.rgb + dst_3.rgb;
+		dst_3.a    = ( 1.0 - dst_3.a ) * color_sample_3.a                 	   + dst_3.a;
+		
+		dst_4.rgb  = ( 1.0 - dst_4.a ) * color_sample_4.a * color_sample_4.rgb + dst_4.rgb;
+		dst_4.a    = ( 1.0 - dst_4.a ) * color_sample_4.a                 	   + dst_4.a;
+		*/
+
+
+
+//if ( color_sample.r == 0.99)
+//dst.a   *=   1.025;

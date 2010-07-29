@@ -1,0 +1,10 @@
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\ResolveAssemblyReference.cache
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\Window1.baml
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\Window1.g.cs
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\App.g.cs
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\Filter_TestApp_Content.g.cs
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\Filter_TestApp_MarkupCompile.cache
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\Filter_TestApp.g.resources
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\Filter_TestApp.Properties.Resources.resources
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\ResGen.read.1.tlog
+D:\My Documents\KMER - HOME transfer\Development - Experimental Application\VRayEngine - July [Refactored]\Plugin\Filter_TestApp2\obj\Debug\ResGen.write.1.tlog

@@ -1,0 +1,128 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="volume" priority="0" />
+      <Item value="unsafe" priority="1" />
+      <Item value="bmpData" priority="1" />
+      <Item value="for" priority="2" />
+      <Item value="int" priority="8" />
+      <Item value="i" priority="9" />
+      <Item value="ConsoleModifiers" priority="0" />
+      <Item value="Console" priority="3" />
+      <Item value="sum" priority="3" />
+      <Item value="long" priority="0" />
+      <Item value="TimeZoneNotFoundException" priority="0" />
+      <Item value="double" priority="7" />
+      <Item value="T" priority="1" />
+      <Item value="short" priority="16" />
+      <Item value="byte" priority="2" />
+      <Item value="c" priority="7" />
+      <Item value="value" priority="0" />
+      <Item value="public" priority="2" />
+      <Item value="DataSet" priority="7" />
+      <Item value="Height" priority="1" />
+      <Item value="this" priority="4" />
+      <Item value="Width" priority="0" />
+      <Item value="Depth" priority="1" />
+      <Item value="bmp" priority="2" />
+      <Item value="a" priority="4" />
+      <Item value="asrt" priority="0" />
+      <Item value="b" priority="1" />
+      <Item value="sizeof" priority="0" />
+      <Item value="string" priority="0" />
+      <Item value="void" priority="1" />
+      <Item value="k" priority="6" />
+      <Item value="data" priority="1" />
+      <Item value="Math" priority="3" />
+      <Item value="gx" priority="1" />
+      <Item value="gy" priority="1" />
+      <Item value="KeyValuePair" priority="1" />
+      <Item value="orig" priority="0" />
+      <Item value="C" priority="1" />
+      <Item value="Gx" priority="1" />
+      <Item value="Gy" priority="0" />
+      <Item value="scale" priority="2" />
+      <Item value="temp" priority="2" />
+      <Item value="temp2" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Drawing.Imaging.BitmapData">
+      <Item value="Stride" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Drawing.Bitmap">
+      <Item value="UnlockBits" priority="0" />
+      <Item value="Width" priority="0" />
+      <Item value="Height" priority="0" />
+      <Item value="PixelFormat" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Console">
+      <Item value="WriteLine" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AllocationTest.DataSet">
+      <Item value="Width" priority="0" />
+      <Item value="Height" priority="0" />
+      <Item value="Depth" priority="0" />
+      <Item value="volume" priority="3" />
+      <Item value="MultiplyBy" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Math">
+      <Item value="Sqrt" priority="0" />
+      <Item value="Exp" priority="0" />
+      <Item value="Abs" priority="0" />
+      <Item value="Pow" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:Program.cs" caret="1543" fromTop="29" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="7808" fromTop="7" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="7121" fromTop="17" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="7531" fromTop="27" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="7866" fromTop="34" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="5278" fromTop="35" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="5100" fromTop="32" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="3971" fromTop="5" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="5044" fromTop="41" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="4333" fromTop="22" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="4808" fromTop="34" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="4104" fromTop="17" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="5046" fromTop="41" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="3544" fromTop="5" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:Program.cs" caret="416" fromTop="17" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="11062" fromTop="29" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="6845" fromTop="12" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="8137" fromTop="49" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:Program.cs" caret="1569" fromTop="38" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:Program.cs" caret="844" fromTop="25" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="10230" fromTop="26" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="10477" fromTop="26" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:Program.cs" caret="1236" fromTop="37" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="9900" fromTop="24" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="339" fromTop="1" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="9485" fromTop="43" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="9098" fromTop="33" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="8830" fromTop="27" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:Program.cs" caret="1296" fromTop="27" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="10904" fromTop="45" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="8744" fromTop="32" />
+      <File id="44BA2228-04B6-438B-BD6A-98CFAC68CB25/f:DataSet.cs" caret="8474" fromTop="26" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerMSTest>
+    <UseTestRunConfigFromMetadataFile>False</UseTestRunConfigFromMetadataFile>
+  </UnitTestRunnerMSTest>
+</Configuration>

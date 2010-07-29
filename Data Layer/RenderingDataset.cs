@@ -20,7 +20,7 @@ namespace Data
 
 			//Data3D = new VolumetricData("skull.raw");
 			//Data3D = new VolumetricData("Carp8bit.raw");
-			Data3D = new VolumetricData( "VisMale.raw" );
+			Data3D = new VolumetricData( "../../Data/VisMale.raw" );
 
 			//Data3D.GenerateRandom();
 		}

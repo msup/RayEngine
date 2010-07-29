@@ -33,7 +33,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,7 +93,7 @@
       <HintPath>..\libemgucv-2.1.0.779-win64\libemgucv-2.1.0.779-win64\bin\Emgu.Util.dll</HintPath>
     </Reference>
     <Reference Include="Fluent">
-      <HintPath>Assemblies\Fluent.dll</HintPath>
+      <HintPath>DLL-Libraries\Fluent.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>DLL-Libraries\log4net.dll</HintPath>
@@ -160,7 +161,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data.cs" />
     <Compile Include="IRenderingDataset.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -235,7 +235,7 @@
     <None Include="OpenGL\Data\Shaders\color.frag" />
     <None Include="OpenGL\Data\Shaders\simple.frag" />
     <None Include="OpenGL\Data\Shaders\vertex.shader" />
-    <None Include="Class Model.cd" />
+    <None Include="Document\Class Model.cd" />
     <None Include="Data Layer\Libraries\OpenTK.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -248,8 +248,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Shaders\shader.vert">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Document\WpfOpenTK.vpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data Layer\Libraries\OpenTK.dll">
@@ -258,7 +259,22 @@
     <Content Include="Data Layer\Libraries\OpenTK.GLControl.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="TODO.txt" />
+    <Content Include="Libraries\AvalonDock.Themes.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Libraries\cv210.dll" />
+    <Content Include="Libraries\cvaux210.dll" />
+    <Content Include="Libraries\cvextern.dll" />
+    <Content Include="Libraries\cxcore210.dll" />
+    <Content Include="Libraries\Emgu.CV.DebuggerVisualizers.dll" />
+    <Content Include="Libraries\Emgu.CV.dll" />
+    <Content Include="Libraries\Emgu.CV.ML.dll" />
+    <Content Include="Libraries\Emgu.CV.UI.dll" />
+    <Content Include="Libraries\Emgu.Util.dll" />
+    <Content Include="Libraries\Fluent.dll" />
+    <Content Include="Libraries\highgui210.dll" />
+    <Content Include="Libraries\log4net.dll" />
+    <Resource Include="Document\TODO.txt" />
     <Resource Include="Data Layer\Libraries\OpenTK.GLControl.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
