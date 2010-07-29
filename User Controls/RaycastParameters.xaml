@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="WpfOpenTK.User_Controls.RaycastParameters"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="151" d:DesignWidth="346">
+    <Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="189*" />
+			<ColumnDefinition Width="157*" />
+		</Grid.ColumnDefinitions>
+		<Label Content="Integration step:" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="labIntegrationStep" VerticalAlignment="Top" />
+		<Label Content="Opacity correction:" Height="28" HorizontalAlignment="Left" Margin="12,46,0,0" Name="labOpacityCorrection" VerticalAlignment="Top" />
+		<Label Content="Low opacity step multiplication:" Height="28" HorizontalAlignment="Left" Margin="12,80,0,0" Name="labLowOpacityStepMultiplication" VerticalAlignment="Top" />
+		<Label Content="Low opacity threshold:" Height="28" HorizontalAlignment="Left" Margin="12,114,0,0" Name="labLowOpacityThreshold" VerticalAlignment="Top" />
+		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,17,0,0" Name="slider1" VerticalAlignment="Top" Width="127" />
+		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,51,0,0" Name="slider2" VerticalAlignment="Top" Width="127" />
+		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,114,0,0" Name="slider3" VerticalAlignment="Top" Width="127" />
+		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,85,0,0" Name="slider4" VerticalAlignment="Top" Width="127" />
+	</Grid>
+</UserControl>

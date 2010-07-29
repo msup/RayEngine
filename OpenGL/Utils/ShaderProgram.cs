@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK
 {
@@ -18,11 +15,21 @@ namespace WpfOpenTK
 
 		public string ProgramInfoLog
 		{
-			get { return programInfoLog; }
-			set { programInfoLog = value; }
+			get
+			{
+				return programInfoLog;
+			}
+			set
+			{
+				programInfoLog = value;
+			}
 		}
 
-		public int ShaderProgramHandle { get; set; }
+		public int ShaderProgramHandle
+		{
+			get;
+			set;
+		}
 
 		#endregion Properties
 
@@ -39,13 +46,13 @@ namespace WpfOpenTK
 		{
 			// GL.AttachShader( ShaderProgramHandle, shaderHandle );
 			//this.addShader( int shaderHandle);
-			
+
 			GL.LinkProgram( ShaderProgramHandle );
 
 			GL.GetProgramInfoLog( ShaderProgramHandle, out programInfoLog );
 		}
 
-		public void addShader( int shaderHandle)
+		public void addShader( int shaderHandle )
 		{
 			GL.AttachShader( ShaderProgramHandle, shaderHandle );
 		}
@@ -63,6 +70,12 @@ namespace WpfOpenTK
 		public void setUniform1( string uniformVariable, int value )
 		{
 			var uniformLocation = GL.GetUniformLocation( ShaderProgramHandle, uniformVariable );
+			GL.Uniform1( uniformLocation, value );
+		}
+
+		public void setUniform1( string uniformVariable, float value )
+		{
+			int uniformLocation = GL.GetUniformLocation( ShaderProgramHandle, uniformVariable );
 			GL.Uniform1( uniformLocation, value );
 		}
 

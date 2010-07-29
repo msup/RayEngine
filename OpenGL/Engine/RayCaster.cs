@@ -89,6 +89,13 @@ namespace VolumeRenderingEngines
 		//  get { return pshader; }
 		//  set { pshader = value; }
 		//}
+
+		public IRenderingDataset VolumeData
+		{
+			get;
+			set;
+		}
+
 		public bool IsLoaded
 		{
 			get;
@@ -406,7 +413,7 @@ namespace VolumeRenderingEngines
 			//Thread.Sleep( 2000 );
 		}
 
-		public void Render( int width, int height, GLControl glControl )
+		public void Render( int width, int height, GLControl glControl, float renderingStep )
 		{
 			glControl.MakeCurrent();
 
@@ -515,6 +522,7 @@ namespace VolumeRenderingEngines
 			this.ShaderPrograms[0].Use();
 			ShaderPrograms[0].setUniform1( "backBuffer", 0 );
 			ShaderPrograms[0].setUniform1( "frontBuffer", 1 );
+			ShaderPrograms[0].setUniform1( "delta", renderingStep );
 
 			//DrawCube();
 			frontSide.BindTextureToTextureUnit();
@@ -566,7 +574,6 @@ namespace VolumeRenderingEngines
 
 		private void FullScreenArea( int width, int height )
 		{
-			//int W = 1024, H = 768;
 			int W = width, H = height;
 
 			double x = (double) 2.0 * W / H;
@@ -704,7 +711,7 @@ namespace VolumeRenderingEngines
 
 		public void RotateXYZ()
 		{
-			angle += 5.0f;
+			angle += 10.0f;
 		}
 
 		// Private Methods (2) 
@@ -771,11 +778,5 @@ namespace VolumeRenderingEngines
 		}
 
 		#endregion Methods
-
-		public IRenderingDataset VolumeData
-		{
-			get;
-			set;
-		}
 	}
 }

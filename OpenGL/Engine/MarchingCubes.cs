@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Plugin;
-using OpenTK.Graphics.OpenGL;
-using Data;
 using System.Diagnostics;
+using Data;
+using OpenTK.Graphics.OpenGL;
+using Plugin;
 
 namespace WpfOpenTK.OpenGL.Engine
 {
@@ -21,12 +18,11 @@ namespace WpfOpenTK.OpenGL.Engine
 			bb = rand.NextDouble();
 			cc = rand.NextDouble();
 		}
-		
+
 		#region IRenderEngine Members
 
-		public void Render( int width, int height, OpenTK.GLControl glControl )
+		public void Render( int width, int height, OpenTK.GLControl glControl, float renderingStep )
 		{
-
 			angle += 0.5;
 
 			Stopwatch sw = new Stopwatch();
@@ -34,8 +30,8 @@ namespace WpfOpenTK.OpenGL.Engine
 
 			glControl.MakeCurrent();
 
-
 			#region Projection Setup
+
 			GL.Enable( EnableCap.DepthTest );
 
 			GL.MatrixMode( MatrixMode.Projection );
@@ -53,6 +49,7 @@ namespace WpfOpenTK.OpenGL.Engine
 			#endregion
 
 			#region Render Setup
+
 			GL.MatrixMode( MatrixMode.Modelview );
 			GL.Clear( ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
 			GL.LoadIdentity();
@@ -70,7 +67,6 @@ namespace WpfOpenTK.OpenGL.Engine
 			k1 /= 8;
 			k2 /= 8;
 
-
 			for ( int i = 0; i < meshGrid.GetLength( 0 ); i++ )
 				for ( int j = 0; j < meshGrid.GetLength( 1 ); j++ )
 				{
@@ -80,7 +76,6 @@ namespace WpfOpenTK.OpenGL.Engine
 
 			GL.Enable( EnableCap.PointSmooth );
 			GL.Begin( BeginMode.Lines );
-
 
 			aa = 1;
 			bb = 0.5;
@@ -108,7 +103,6 @@ namespace WpfOpenTK.OpenGL.Engine
 					GL.Vertex3( ( i + 0 ) / k1, meshGrid[i + 0, j + 0], ( j + 0 ) / k2 );
 					GL.Vertex3( ( i + 1 ) / k1, meshGrid[i + 1, j + 1], ( j + 1 ) / k2 );
 					GL.Vertex3( ( i + 1 ) / k1, meshGrid[i + 1, j + 0], ( j + 0 ) / k2 );
-
 				}
 			GL.End();
 		}
@@ -153,6 +147,5 @@ namespace WpfOpenTK.OpenGL.Engine
 		}
 
 		#endregion
-
 	}
 }

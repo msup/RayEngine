@@ -1,5 +1,6 @@
 ﻿using System;
 using GLSL;
+using NLog;
 using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK
@@ -74,6 +75,10 @@ namespace WpfOpenTK
 
 			// check for errors
 			GL.GetShaderInfoLog( ShaderID, out _compileInfo );
+
+			Logger logger = LogManager.GetCurrentClassLogger();
+			logger.Trace( "Shader compilation" );
+			logger.Trace( _compileInfo );
 		}
 
 		#endregion Constructors
