@@ -150,16 +150,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OpenGL\FrameBufferObject.cs" />
-    <Compile Include="OpenGL\Texture3D.cs" />
+    <Compile Include="OpenGL\Utils\FrameBufferObject.cs" />
+    <Compile Include="OpenGL\Utils\Texture3D.cs" />
     <Compile Include="Plugin\AlgorithmOptions.cs" />
     <Compile Include="Plugin\IClassifier.cs" />
     <Compile Include="Managers\AnimationManager.cs" />
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Data Layer\DataClassifier.cs" />
     <Compile Include="Data Layer\DatasetManager.cs" />
-    <Compile Include="OpenGL\GLTexture.cs" />
-    <Compile Include="OpenGL\GLTexture2D.cs" />
+    <Compile Include="OpenGL\Utils\GLTexture.cs" />
+    <Compile Include="OpenGL\Utils\GLTexture2D.cs" />
     <Compile Include="Data Layer\IData.cs" />
     <Compile Include="OpenGL\Engine\IRenderEngine.cs" />
     <Compile Include="Managers\LayoutManager.cs" />
@@ -168,7 +168,7 @@
     <Compile Include="OpenGL\OpenGLWindow.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="OpenGL\Shader.cs" />
+    <Compile Include="OpenGL\Utils\Shader.cs" />
     <Compile Include="Managers\PluginManager.cs" />
     <Compile Include="Managers\PostprocessingManager.cs" />
     <Compile Include="Managers\PreprocessingManager.cs" />
@@ -196,8 +196,8 @@
     <Compile Include="Managers\RenderWindowManager.cs" />
     <Compile Include="OpenGL\Scene.cs" />
     <Compile Include="OpenGL\IShader.cs" />
-    <Compile Include="OpenGL\ShaderManager.cs" />
-    <Compile Include="OpenGL\ShaderProgram.cs" />
+    <Compile Include="OpenGL\Utils\ShaderManager.cs" />
+    <Compile Include="OpenGL\Utils\ShaderProgram.cs" />
     <Compile Include="Managers\UpdateManager.cs" />
     <Compile Include="Data Layer\VolumeData.cs" />
     <Compile Include="Managers\WindowManager.cs" />

@@ -25,20 +25,25 @@ namespace WpfOpenTK
 			}
 		}
 
-		#endregion
+		#endregion public properties
 
 		#region private fields
 
 		private List<ShaderProgram> shaderPrograms = new List<ShaderProgram>();
 
-		#endregion
+		#endregion private fields
 
 		#region public functions
 
 		public void createProgram( string path )
 		{
+			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+
 			// FIXME - change path
-			Shader pixelShader  = new Shader( path + "Shaders/shader.frag", ShaderType.FragmentShader );
+			//Shader pixelShader  = new Shader( path + "Shaders/shader.frag", ShaderType.FragmentShader );
+			var raycastShaderPath = configurationAppSettings.GetValue( "RaycastingShaderPath", typeof( string ) );
+			Shader pixelShader  = new Shader( path + raycastShaderPath, ShaderType.FragmentShader );
+
 			Shader vertexShader = new Shader( path + "Shaders/shader.vert", ShaderType.VertexShader );
 
 			// string result = pshader.CompileInfo;
@@ -57,6 +62,6 @@ namespace WpfOpenTK
 			shaderPrograms.Add( sprogram );
 		}
 
-		#endregion
+		#endregion public functions
 	}
 }
