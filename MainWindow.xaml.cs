@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using AvalonDock;
 using Data;
+using NLog;
 using WpfOpenTK.Managers;
 
 namespace WpfOpenTK
@@ -21,13 +22,16 @@ namespace WpfOpenTK
 		private WindowManager wm = null;
 		private PluginManager pm = null;
 
-		#endregion
+		#endregion private fields - managers
 
 		#region Constructors
 
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			Logger logger = LogManager.GetCurrentClassLogger();
+			logger.Trace( "Application Starting..." );
 
 			lm = new LoggingManager();
 

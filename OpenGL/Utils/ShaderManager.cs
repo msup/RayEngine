@@ -39,11 +39,10 @@ namespace WpfOpenTK
 		{
 			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
 
-			// FIXME - change path
-			//Shader pixelShader  = new Shader( path + "Shaders/shader.frag", ShaderType.FragmentShader );
 			var raycastShaderPath = configurationAppSettings.GetValue( "RaycastingShaderPath", typeof( string ) );
 			Shader pixelShader  = new Shader( path + raycastShaderPath, ShaderType.FragmentShader );
 
+			// FIXME: add config
 			Shader vertexShader = new Shader( path + "Shaders/shader.vert", ShaderType.VertexShader );
 
 			// string result = pshader.CompileInfo;

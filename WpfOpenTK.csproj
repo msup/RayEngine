@@ -77,6 +77,7 @@
     <Reference Include="Fluent">
       <HintPath>DLL-Libraries\Fluent.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="OpenTK.GLControl, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -211,6 +212,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="OpenGL\Data\Shaders\color.frag" />
     <None Include="OpenGL\Data\Shaders\simple.frag" />
     <None Include="OpenGL\Data\Shaders\vertex.shader" />
