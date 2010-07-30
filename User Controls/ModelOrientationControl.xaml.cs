@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using Plugin;
@@ -26,10 +26,23 @@ namespace WpfOpenTK.User_Controls
 			var engine = renderPlugin as RayCaster;
 
 			// ok working
-			if ( engine == null )
-				throw new Exception( "Render Engine object is null." );
-			else
+			//if ( engine == null )
+			//    throw new Exception( "Render Engine object is null." );
+			//else
+			//    Dispatcher.BeginInvoke( new renderDelegate( engine.Render ) );
+
+			ThreadStart ts = delegate
+			{
 				Dispatcher.BeginInvoke( new renderDelegate( engine.Render ) );
+				// crashed! engine.Render();
+			};
+
+			lock ( this )
+			{
+				Thread newThread = new Thread( ts );
+				newThread.Priority = ThreadPriority.BelowNormal;
+				newThread.Start();
+			}
 		}
 	}
 }

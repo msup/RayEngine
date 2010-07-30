@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
     xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
-    Title="Fluent.Sample.Mvvm"
+    Title="Raycasting Demo"
     Width="701"
     Height="318"
     Background="#FFEBEDF0"

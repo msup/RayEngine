@@ -62,8 +62,8 @@ vec3 Lighting(vec3 vPosition, vec3 vNormal, vec3 vLightAmbient, vec3 vLightDiffu
 
 	return 1*vLightAmbient +
 	//1*vLightDiffuse*max(dot(vNormal, -vLightDir),0.0)*voxelColor.rgb+
-	0.0*vLightDiffuse  * max(dot(vNormal, -vLightDir),0.0) +
-	0.0*vLightSpecular * pow(max(dot(vReflection, vLightDir),0.0),3.00);
+	1.0*vLightDiffuse  * max(dot(vNormal, -vLightDir),0.0) +
+	1.0*vLightSpecular * pow(max(dot(vReflection, vLightDir),0.0),3.00);
 }
 
 vec3 ComputeNormal(vec3 vHitPosTex) {
@@ -126,7 +126,7 @@ vec4 Classify (vec4 color_sample) {
 
 	if (color.a < AlphaThreshold)
 	{
-		delta_dir = norm_dir * 1 * delta;
+		delta_dir = norm_dir * 10 * delta;
 		asdf = 0;
 	}
 	else
@@ -147,6 +147,12 @@ vec4 color_sample_4 = vec4(0,0,0,0);
 
 void main()
 {
+	if (stop == start)
+	{
+	gl_FragColor = vec4(0.9,0.5,0.9,0.9);
+	return;
+	}
+
 	vec4 dst = vec4(0.0, 0.0, 0.0, 0);
 
 	vec4 dst_1 = vec4(0, 0, 0, 0);
@@ -170,12 +176,11 @@ void main()
 		if (dst.a >= 0.999f)
 		break;
 
-	/*	if (color_sample.a > AlphaThreshold && asdf == 1)
+		if (color_sample.a > AlphaThreshold && asdf == 1)
 		{
-			vec	-=	norm_dir * 1 * delta;
+			vec	-=	norm_dir * 10 * delta;
 			vec +=  norm_dir * delta;
 		}
-	*/
 
 		// ---------------- classification end ------------------
 
@@ -189,9 +194,9 @@ void main()
 		//float gradient = 0.8*dot(normal,normal);
 		//color_sample.rgb += gradient;
 
-		vec3 vLightAmbient  = vec3(0.9,0.9,0.9);
-		vec3 vLightDiffuse  = vec3(0.0,0.0,1.0);
-		vec3 vLightSpecular = vec3(0.0,1.0,0.0);
+		vec3 vLightAmbient  = vec3(0.4,0.4,0.8);
+		vec3 vLightDiffuse  = vec3(0.0,0.0,0.4);
+		vec3 vLightSpecular = vec3(0.0,0.25,0.25);
 
 		//color_sample.rgb += Lighting(vec,  normal,  vLightAmbient,  vLightDiffuse,  vLightSpecular);
 
@@ -200,7 +205,7 @@ void main()
 		//color_sample.rgb /= 3.0;
 
 		vec3 LightDir = vec3(1.0,1.0,1.0);
-		//color_sample.rgb += Lighting(vec,  normal,  vLightAmbient,  vLightDiffuse,  vLightSpecular, color_sample.rgb);
+		color_sample.rgb += Lighting(vec,  normal,  vLightAmbient,  vLightDiffuse,  vLightSpecular, color_sample.rgb);
 		//color_sample.rgb = (vec3((1-normal.r,1-normal.r,1-normal.r)));
 		color_sample.rgb *= color_sample.a;
 
@@ -227,10 +232,10 @@ void main()
 	else
 */
 	if (dst.a > 0.0001)
-		gl_FragColor = 20 * vec4(dst.r,dst.g,dst.b,dst.a);
+		gl_FragColor = 10 * vec4(dst.r,dst.g,dst.b,dst.a);
 	else
 	{
-		dst.rgb = mix(dst.rgb,vec3(0.96,0.76,0.85),0.2);
+		dst.rgb = mix(vec3(0.7,0.0,0.1),dst.rgb,0.5);
 		gl_FragColor =  vec4(dst.r,dst.g,dst.b,dst.a);
 	}
 
