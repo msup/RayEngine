@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK.OpenGL
@@ -13,7 +10,6 @@ namespace WpfOpenTK.OpenGL
 		public Texture3D( int width, int height, int depth )
 		{
 			GL.Enable( EnableCap.Texture3DExt );
-
 
 			GL.GenTextures( 1, out textureHandle );
 			GL.ActiveTexture( TextureUnit.Texture2 );
@@ -56,7 +52,6 @@ namespace WpfOpenTK.OpenGL
 
 		public void Bind()
 		{
-
 			//GL.ActiveTexture( TextureUnit.Texture2 );
 			GL.BindTexture( TextureTarget.Texture3D, textureHandle );
 			GL.Enable( EnableCap.Texture3DExt );
@@ -68,6 +63,5 @@ namespace WpfOpenTK.OpenGL
 			GL.BindTexture( TextureTarget.Texture3D, 0 );
 			GL.Disable( EnableCap.Texture3DExt );
 		}
-
 	}
 }
