@@ -24,7 +24,7 @@ namespace WpfOpenTK
 		// TODO:
 		//' FIXME
 		// this remove to different class
-		float renderingStep = 0.01f;
+		float renderingStep = 1.0f;
 
 		#region public methods
 
@@ -42,7 +42,7 @@ namespace WpfOpenTK
 			renderProgressTimer.Elapsed += new System.Timers.ElapsedEventHandler( renderProgressTimer_Elapsed );
 			renderProgressTimer.AutoReset = false;
 			// Set the Interval to 1000 milliseconds
-			renderProgressTimer.Interval = 1000;
+			renderProgressTimer.Interval = 5000;
 			renderProgressTimer.Enabled = false;
 		}
 
@@ -71,8 +71,9 @@ namespace WpfOpenTK
 					BeginInvoke( updateIt );
 				};
 
-				Thread newThread = new Thread( ts );
-				newThread.Priority = ThreadPriority.BelowNormal;
+				Thread newThread   = new Thread( ts );
+				newThread.Priority = ThreadPriority.Normal;
+				newThread.Name     = "Rendering Thread";
 				newThread.Start();
 			}
 		}
@@ -133,7 +134,7 @@ namespace WpfOpenTK
 				this.MakeCurrent();
 
 			renderingStep = 0.01f;
-			renderProgressTimer.Enabled = true;
+			renderProgressTimer.Enabled = false; // FIXME: true to be working
 			Update();
 		}
 
@@ -141,7 +142,7 @@ namespace WpfOpenTK
 		{
 			Render( renderingStep );
 			renderProgressTimer.Interval = 1000;
-			renderProgressTimer.Enabled = true;
+			renderProgressTimer.Enabled  = false; // FIXME: true to be working
 		}
 
 		#endregion private methods

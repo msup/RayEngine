@@ -57,7 +57,6 @@ namespace WpfOpenTK
 			//sprogram.setUniform1( "frontBuffer", 1 );
 
 			//sprogram.attach();
-
 			shaderPrograms.Add( sprogram );
 		}
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace WpfOpenTK
 {
@@ -44,16 +46,43 @@ namespace WpfOpenTK
 
 		public VolumetricData( string fileName )
 		{
-			Width  = 256;
-			Height = 128;
-			Depth  = 256;
+			// Get the volume data file path
+			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+			string volumeDataPath = (string) configurationAppSettings.GetValue( "VolumeDataPath", typeof( string ) );
+
+			#region Read volume dimensions from accompanying xml volume data
+
+			var volumeDataDescriptionFile = XDocument.Load( volumeDataPath+".xml" );
+
+			Width  = Int32.Parse(
+					 (
+					 from c in volumeDataDescriptionFile.Descendants( "Dimensions" )
+					 select c.Element( "Width" ).Value
+					 ).Single()
+			);
+
+			Height = Int32.Parse(
+					 (
+					 from c in volumeDataDescriptionFile.Descendants( "Dimensions" )
+					 select c.Element( "Height" ).Value
+					 ).Single()
+			);
+
+			Depth = Int32.Parse(
+					 (
+					 from c in volumeDataDescriptionFile.Descendants( "Dimensions" )
+					 select c.Element( "Depth" ).Value
+					 ).Single()
+			);
+
+			#endregion Read volume dimensions from accompanying xml volume data
 
 			volumeData = new uint[Width, Height, Depth];
 
 			// FIXME: dimension check
 			// TODO: check the format - raw
 
-			FileStream inStream = new FileStream( fileName, FileMode.Open );
+			FileStream inStream = new FileStream( volumeDataPath, FileMode.Open );
 
 			BinaryReader binReader = new BinaryReader( inStream );
 
@@ -78,7 +107,7 @@ namespace WpfOpenTK
 				for ( int j = 0; j < width; j++ )
 				{
 					// TODO: fixme 256*256
-					destination[j, i, depthIndex] = (uint) source[i + j * height] * 256 * 256;
+					destination[j, i, depthIndex] = (uint) source[i + j * height] << 16;
 				}
 		}
 

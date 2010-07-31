@@ -1,2 +1,0 @@
-﻿- UML design
-savitzky golay 3d

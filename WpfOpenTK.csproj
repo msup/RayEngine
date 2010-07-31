@@ -203,7 +203,7 @@
     <Compile Include="OpenGL\RenderWindow.cs" />
     <Compile Include="Managers\RenderWindowManager.cs" />
     <Compile Include="OpenGL\Scene.cs" />
-    <Compile Include="OpenGL\IShader.cs" />
+    <Compile Include="OpenGL\Utils\IShader.cs" />
     <Compile Include="OpenGL\Utils\ShaderManager.cs" />
     <Compile Include="OpenGL\Utils\ShaderProgram.cs" />
     <Compile Include="Managers\UpdateManager.cs" />
@@ -218,14 +218,17 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="OpenGL\Data\Shaders\color.frag" />
     <None Include="OpenGL\Data\Shaders\simple.frag" />
     <None Include="OpenGL\Data\Shaders\vertex.shader" />
-    <None Include="Document\Class Model.cd" />
+    <None Include="Documentation\Class Model.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -237,7 +240,7 @@
     <None Include="Shaders\shader.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Document\WpfOpenTK.vpp" />
+    <None Include="Documentation\WpfOpenTK.vpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libraries\AvalonDock.Themes.dll">
@@ -255,7 +258,7 @@
     <Content Include="Libraries\Fluent.dll" />
     <Content Include="Libraries\highgui210.dll" />
     <Content Include="Libraries\log4net.dll" />
-    <Resource Include="Document\TODO.txt" />
+    <Resource Include="Documentation\TODO.txt" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

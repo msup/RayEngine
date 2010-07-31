@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Data;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
@@ -14,6 +15,11 @@ namespace VolumeRenderingEngines
 	class RayCaster : IRenderEngine, IOrientation
 	{
 		#region Fields (3)
+
+		private float angleX = 0.0f;
+		private float angleY = 0.0f;
+		private float angleZ = 0.0f;
+		private float translateZ = 0.0f;
 
 		private float angle = 1.5f;
 		//bool _init = false;
@@ -74,6 +80,13 @@ namespace VolumeRenderingEngines
 
 		public RayCaster( DatasetManager datasetManager )
 		{
+			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+
+			angleX     = (float) configurationAppSettings.GetValue( "RotateX", typeof( float ) );
+			angleY     = (float) configurationAppSettings.GetValue( "RotateY", typeof( float ) );
+			angleZ     = (float) configurationAppSettings.GetValue( "RotateZ", typeof( float ) );
+			translateZ = (float) configurationAppSettings.GetValue( "TranslateZ", typeof( float ) );
+
 			shaderPaths.Add( @"../../Data/Shaders/simple.frag" );
 			LocateShaders();
 
@@ -410,7 +423,7 @@ namespace VolumeRenderingEngines
 			widthOld = width;
 			heightOld = height;
 
-			//Thread.Sleep( 2000 );
+			Thread.Sleep( 2000 );
 		}
 
 		public void Render( int width, int height, GLControl glControl, float renderingStep )
@@ -469,8 +482,10 @@ namespace VolumeRenderingEngines
 			GL.Clear( ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
 			GL.LoadIdentity();
 
-			GL.Translate( 0.1, 0.1, -1.5 );
-			GL.Rotate( angle, 1, 1, 0 );
+			GL.Translate( 0.1, 0.1, translateZ );
+			GL.Rotate( angleX, 1, 0, 0 );
+			GL.Rotate( angleY, 0, 1, 0 );
+			GL.Rotate( angleZ, 0, 0, 1 );
 
 			#endregion
 
@@ -566,10 +581,8 @@ namespace VolumeRenderingEngines
 
 			#endregion
 
-			widthOld = width;
+			widthOld  = width;
 			heightOld = height;
-
-			//glControl.Context.MakeCurrent( null );
 		}
 
 		private void FullScreenArea( int width, int height )

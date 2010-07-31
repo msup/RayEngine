@@ -33,6 +33,7 @@ namespace WpfOpenTK.User_Controls
 
 			ThreadStart ts = delegate
 			{
+				engine.RotateXYZ();
 				Dispatcher.BeginInvoke( new renderDelegate( engine.Render ) );
 				// crashed! engine.Render();
 			};
