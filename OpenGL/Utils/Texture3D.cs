@@ -3,11 +3,11 @@ using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK.OpenGL
 {
-	public class Texture3D
+	public class GLTexture3D
 	{
 		int textureHandle = 2;
 
-		public Texture3D( int width, int height, int depth )
+		public GLTexture3D( int width, int height, int depth )
 		{
 			GL.Enable( EnableCap.Texture3DExt );
 
@@ -15,15 +15,18 @@ namespace WpfOpenTK.OpenGL
 			GL.ActiveTexture( TextureUnit.Texture2 );
 			GL.BindTexture( TextureTarget.Texture3D, textureHandle );
 
-			GL.TexImage3D( TextureTarget.Texture3D, 0, PixelInternalFormat.Four, width, height, depth, 0, PixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero );
+			GL.Ext.TexImage3D( TextureTarget.Texture3D, 0, PixelInternalFormat.Four, width, height, depth, 0, PixelFormat.Blue, PixelType.Byte, IntPtr.Zero );
+
+			//GL.PixelStore( PixelStoreParameter.UnpackAlignment, 1 );
+			//GL.PixelStore( PixelStoreParameter.PackAlignment, 1 );
 
 			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear );
 			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear );
-			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Clamp );
-			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.Clamp );
-			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureWrapR, (int) TextureWrapMode.Clamp );
+			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToBorder );
+			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToBorder );
+			GL.TexParameter( TextureTarget.Texture3D, TextureParameterName.TextureWrapR, (int) TextureWrapMode.ClampToBorder );
 
-			////GL.TexParameterI(TextureTarget.Texture3D,TextureParameterName.TextureWrapR,
+			////GL.TexParameterI(TextureTarget.GLTexture3D,TextureParameterName.TextureWrapR,
 
 			GL.BindTexture( TextureTarget.Texture3D, 0 );
 
@@ -42,11 +45,27 @@ namespace WpfOpenTK.OpenGL
 			*/
 		}
 
-		public void Load( int width, int height, int depth, uint[, ,] textureData )
+		public void Load( int width, int height, int depth, byte[, ,] textureData )
 		{
 			//GL.ActiveTexture( TextureUnit.Texture2 );
 			GL.BindTexture( TextureTarget.Texture3D, textureHandle );
-			GL.TexImage3D( TextureTarget.Texture3D, 0, PixelInternalFormat.Four, width, height, depth, 0, PixelFormat.Bgra, PixelType.UnsignedByte, textureData );
+
+			//	GL.PixelStore( PixelStoreParameter.UnpackAlignment, 1 );
+			//	GL.PixelStore( PixelStoreParameter.PackAlignment, 1 );
+
+			GL.Ext.TexImage3D( TextureTarget.Texture3D, 0, PixelInternalFormat.Four, width, height, depth, 0, PixelFormat.Blue, PixelType.Byte, textureData );
+			GL.BindTexture( TextureTarget.Texture3D, 0 );
+		}
+
+		public void Load( int width, int height, int depth, byte[] textureData )
+		{
+			//GL.ActiveTexture( TextureUnit.Texture2 );
+			GL.BindTexture( TextureTarget.Texture3D, textureHandle );
+
+			//	GL.PixelStore( PixelStoreParameter.UnpackAlignment, 1 );
+			//	GL.PixelStore( PixelStoreParameter.PackAlignment, 1 );
+
+			GL.Ext.TexImage3D( TextureTarget.Texture3D, 0, PixelInternalFormat.Four, width, height, depth, 0, PixelFormat.Blue, PixelType.Byte, textureData );
 			GL.BindTexture( TextureTarget.Texture3D, 0 );
 		}
 

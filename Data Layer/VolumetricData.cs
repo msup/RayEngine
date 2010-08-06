@@ -7,7 +7,8 @@ namespace WpfOpenTK
 {
 	public class VolumetricData
 	{
-		uint[, ,] volumeData = null;
+		byte[, ,] volumeData = null;
+		byte[] wholeVolumeData = null;
 
 		public int Width
 		{
@@ -27,11 +28,19 @@ namespace WpfOpenTK
 			set;
 		}
 
-		public uint[, ,] RawVolumeData
+		public byte[, ,] RawVolumeData
 		{
 			get
 			{
 				return volumeData;
+			}
+		}
+
+		public byte[] VolumeDataArray
+		{
+			get
+			{
+				return wholeVolumeData;
 			}
 		}
 
@@ -41,14 +50,21 @@ namespace WpfOpenTK
 			Height = height;
 			Depth = depth;
 
-			volumeData = new uint[Width, Height, Depth];
+			volumeData = new byte[Width, Height, Depth];
 		}
 
+		/// <summary>
+		/// deprecated
+		/// </summary>
+		/// <param name="fileName"></param>
 		public VolumetricData( string fileName )
 		{
-			// Get the volume data file path
+			#region Get the volume data file path
+
 			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
 			string volumeDataPath = (string) configurationAppSettings.GetValue( "VolumeDataPath", typeof( string ) );
+
+			#endregion Get the volume data file path
 
 			#region Read volume dimensions from accompanying xml volume data
 
@@ -77,7 +93,13 @@ namespace WpfOpenTK
 
 			#endregion Read volume dimensions from accompanying xml volume data
 
-			volumeData = new uint[Width, Height, Depth];
+			#region Volume memory allocation
+
+			volumeData = new byte[Width, Height, Depth];
+			if ( volumeData == null )
+				throw new Exception( "Memory allocation for volume data failed." );
+
+			#endregion Volume memory allocation
 
 			// FIXME: dimension check
 			// TODO: check the format - raw
@@ -89,25 +111,106 @@ namespace WpfOpenTK
 			byte[] rawData = new byte[Width * Height];
 
 			uint index = 0;
+
 			while ( ( binReader.Read( rawData, 0, Width * Height ) != 0 ) && index < Depth )
 			{
 				CopyToArray( rawData, ref volumeData, Width, Height, index );
+
+				FileStream fstream  = new FileStream( "file"+index.ToString(), FileMode.Create );
+				fstream.Write( rawData, 0, rawData.Length );
+				fstream.Close();
+
 				index++;
 			}
-
-			int a = 0;
 		}
 
-		void CopyToArray( byte[] source, ref uint[, ,] destination, int width, int height, uint depthIndex )
+		public VolumetricData()
+		{
+			#region Get the volume data file path
+
+			System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
+			string volumeDataPath = (string) configurationAppSettings.GetValue( "VolumeDataPath", typeof( string ) );
+
+			#endregion Get the volume data file path
+
+			#region Read volume dimensions from accompanying xml volume data
+
+			var volumeDataDescriptionFile = XDocument.Load( volumeDataPath+".xml" );
+
+			Width  = Int32.Parse(
+					 (
+					 from c in volumeDataDescriptionFile.Descendants( "Dimensions" )
+					 select c.Element( "Width" ).Value
+					 ).Single()
+			);
+
+			Height = Int32.Parse(
+					 (
+					 from c in volumeDataDescriptionFile.Descendants( "Dimensions" )
+					 select c.Element( "Height" ).Value
+					 ).Single()
+			);
+
+			Depth = Int32.Parse(
+					 (
+					 from c in volumeDataDescriptionFile.Descendants( "Dimensions" )
+					 select c.Element( "Depth" ).Value
+					 ).Single()
+			);
+
+			#endregion Read volume dimensions from accompanying xml volume data
+
+			#region Volume memory allocation
+
+			wholeVolumeData = new byte[Width* Height* Depth];
+			if ( wholeVolumeData == null )
+				throw new Exception( "Memory allocation for volume data failed." );
+
+			#endregion Volume memory allocation
+
+			#region Read Volume data
+
+			FileStream inStream = new FileStream(
+								volumeDataPath, FileMode.Open
+								);
+
+			BinaryReader binReader = new BinaryReader(
+									inStream
+									);
+
+			binReader.Read( wholeVolumeData, 0, Width * Height * Depth );
+
+			inStream.Close();
+			binReader.Close();
+
+			#endregion Read Volume data
+		}
+
+		void CopyToArray( byte[] source, ref byte[, ,] destination, int width, int height, uint depthIndex )
 		{
 			// changed for, to height, width reversed
 			// changed destination j, i
 			// changed source height
-			for ( int i = 0; i < height; i++ )
-				for ( int j = 0; j < width; j++ )
+			/*for ( int i = 0; i < width; i++ )
+				for ( int j = 0; j < height; j++ )
 				{
 					// TODO: fixme 256*256
-					destination[j, i, depthIndex] = (uint) source[i + j * height] << 16;
+					destination[i, j, depthIndex] = (uint)
+						( ( source[i*height + j] << 16 )
+						//|
+						//  ( source[i*height + j] << 16 ) |
+						//  ( source[i*height + j] << 08 ) |
+						//  ( source[i*height + j] << 00 )
+						);
+				}
+
+			*/
+
+			for ( int i = 0; i < width; i++ )
+				for ( int j = 0; j < height; j++ )
+				{
+					// TODO: fixme 256*256
+					destination[i, j, depthIndex] =  source[i+j*height];
 				}
 		}
 
@@ -118,7 +221,7 @@ namespace WpfOpenTK
 			for ( int i = 0; i < Width; i++ )
 				for ( int j = 0; j < Height; j++ )
 					for ( int k = 0; k < Depth; k++ )
-						volumeData[i, j, k] = (uint) ( rand.Next() );
+						volumeData[i, j, k] += (byte) ( rand.Next() );
 		}
 	}
 }

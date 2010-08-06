@@ -94,7 +94,7 @@
 
 		<ResourceDictionary x:Key="sa">
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="RoundedButton.xaml" />
+				<!--<ResourceDictionary Source="RoundedButton.xaml" />-->
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 

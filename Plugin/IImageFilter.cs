@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WpfOpenTK
+﻿namespace WpfOpenTK
 {
-    public interface IDataFilter : IFilter
-    {
-    }
+	public interface IDataFilter : IFilter
+	{
+	}
 }

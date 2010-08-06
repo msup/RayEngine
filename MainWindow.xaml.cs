@@ -17,10 +17,10 @@ namespace WpfOpenTK
 		#region private fields - managers
 
 		private RenderWindowManager rwm = null;
-		private DatasetManager dsm = null;
-		private LoggingManager lm = null;
-		private WindowManager wm = null;
-		private PluginManager pm = null;
+		private DatasetManager dsm      = null;
+		private LoggingManager lm       = null;
+		private WindowManager wm        = null;
+		private PluginManager pm        = null;
 
 		#endregion private fields - managers
 

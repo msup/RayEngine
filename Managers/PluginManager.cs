@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Reflection;
-using VolumeRenderingEngines;
-using Data;
-using Plugins;
-using Plugin;
 using System.Windows;
-using WpfOpenTK.OpenGL.Engine;
-using AvalonDock;
-using WpfOpenTK.User_Controls;
 using System.Windows.Controls;
+using AvalonDock;
+using Data;
+using Plugin;
+using Plugins;
+using VolumeRenderingEngines;
+using WpfOpenTK.OpenGL.Engine;
+using WpfOpenTK.User_Controls;
 
 namespace WpfOpenTK
 {
@@ -80,7 +79,6 @@ namespace WpfOpenTK
 			{
 			}
 
-
 			Type PluginClass = null;
 			int i = 0;
 
@@ -90,91 +88,81 @@ namespace WpfOpenTK
 
 			//foreach ( Type type in asm.GetTypes() )
 			//{
-				//PluginClass = type;
+			//PluginClass = type;
 
-				// !! FIXME: for debug only
-				//if ( PluginClass is IRenderEngine )
-				// if a rendering able plugin was found
-				//{
-					try
-					{
-						// create an instance of rendering plugin
-						//IRenderEngine tplugin = Activator.CreateInstance( PluginClass ) as IRenderEngine;
+			// !! FIXME: for debug only
+			//if ( PluginClass is IRenderEngine )
+			// if a rendering able plugin was found
+			//{
+			try
+			{
+				// create an instance of rendering plugin
+				//IRenderEngine tplugin = Activator.CreateInstance( PluginClass ) as IRenderEngine;
 
-						IRenderEngine tplugin = (IRenderEngine) new RayCaster(dsm);
+				IRenderEngine tplugin = (IRenderEngine) new RayCaster( dsm );
 
+				ModelOrientationControl orientationControl = new ModelOrientationControl( tplugin );
+				var dockPane = new DockablePane();
 
-						ModelOrientationControl orientationControl = new ModelOrientationControl(tplugin);
-						var dockPane = new DockablePane();
+				dockPane.Items.Add( new DockableContent()
+				{
+					Name = "orientationContent",
+					Title = "Orientation",
+					Content = orientationControl
+				} );
 
-						dockPane.Items.Add( new DockableContent()
-						{
-							Name = "orientationContent",
-							Title = "Orientation",
-							Content = orientationControl
+				var resHorizontalPanel = new ResizingPanel()
+				{
+					Orientation = Orientation.Horizontal
+				};
 
-						} );
+				resHorizontalPanel.Children.Add( dockPane );
 
-            var resHorizontalPanel = new ResizingPanel()
-            {
-              Orientation = Orientation.Horizontal
-            };
+				//resHorizontalPanel.Children.Add( logDockPane);
+				this.wm.DockingManager.Content = resHorizontalPanel;
 
+				var ccc = this.wm.DockingManager.Content;
 
-             resHorizontalPanel.Children.Add( dockPane );
+				if ( tplugin != null )
+					Plugins.Add( tplugin );
 
-      //resHorizontalPanel.Children.Add( logDockPane);
-             this.wm.DockingManager.Content = resHorizontalPanel;
-             
-            var ccc = this.wm.DockingManager.Content;
-        
+				// setup a new RenderWindow
+				RenderWindow renderWindow = new RenderWindow();
+				renderWindow.RenderEngine = tplugin;
 
-						if (tplugin != null)
-							Plugins.Add(tplugin);
+				//var renderingDataset = dsm.getRenderingDatasetRef();
+				//renderWindow.SetRenderingDataset( ref renderingDataset );
 
+				OpenGLWindow glWindow = new OpenGLWindow();
+				glWindow.SetRenderingMethod( tplugin );
 
-						// setup a new RenderWindow
-						RenderWindow renderWindow = new RenderWindow();
-						renderWindow.RenderEngine = tplugin;
+				renderWindow.GlWindows.Add( glWindow );
+				this.rwm.RenderWindows.Add( renderWindow );
 
-						//var renderingDataset = dsm.getRenderingDatasetRef();
-						//renderWindow.SetRenderingDataset( ref renderingDataset );
+				// setup marching cubes opengl window
+				IRenderEngine marchingCubesPlugin = (IRenderEngine) new MarchingCubes( dsm );
 
-						OpenGLWindow glWindow = new OpenGLWindow();
-						glWindow.SetRenderingMethod(tplugin);
+				if ( marchingCubesPlugin != null )
+					Plugins.Add( marchingCubesPlugin );
 
-						renderWindow.GlWindows.Add(glWindow);
-						this.rwm.RenderWindows.Add(renderWindow);
+				// setup a new RenderWindow
+				RenderWindow renderWindow2 = new RenderWindow();
+				renderWindow2.RenderEngine = marchingCubesPlugin;
 
+				OpenGLWindow glWindow2 = new OpenGLWindow();
+				glWindow2.SetRenderingMethod( marchingCubesPlugin );
 
+				renderWindow2.GlWindows.Add( glWindow2 );
+				//this.rwm.RenderWindows.Add(renderWindow2);
 
-						// setup marching cubes opengl window
-						IRenderEngine marchingCubesPlugin = (IRenderEngine) new MarchingCubes(dsm);
+				wm.Register( this.rwm );
+			}
+			//}
 
-						if (marchingCubesPlugin != null)
-							Plugins.Add(marchingCubesPlugin);
-
-						// setup a new RenderWindow
-						RenderWindow renderWindow2 = new RenderWindow();
-						renderWindow2.RenderEngine = marchingCubesPlugin;
-
-						OpenGLWindow glWindow2 = new OpenGLWindow();
-						glWindow2.SetRenderingMethod(marchingCubesPlugin);
-
-						renderWindow2.GlWindows.Add(glWindow2);
-						//this.rwm.RenderWindows.Add(renderWindow2);
-
-
-						wm.Register(this.rwm);
-					}
-				//}
-				
 			catch ( Exception e )
-					{
-						MessageBox.Show( "Shit happened during plugin registration: " + PluginFile + e.Message );
-					}
-				
-			
+			{
+				MessageBox.Show( "Shit happened during plugin registration: " + PluginFile + e.Message );
+			}
 
 			return true;
 		}

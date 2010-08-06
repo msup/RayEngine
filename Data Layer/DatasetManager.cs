@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Data;
-
-
-namespace Data
+﻿namespace Data
 {
 	public class DatasetManager
 	{
@@ -18,6 +12,5 @@ namespace Data
 		{
 			RenderingDataset = new RenderingDataset();
 		}
-
 	}
 }

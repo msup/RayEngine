@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Data
+﻿namespace Data
 {
-    public interface IData
-    {
-    }
+	public interface IData
+	{
+	}
 }

@@ -2,7 +2,6 @@
 using Data;
 using Plugin;
 
-
 namespace WpfOpenTK
 {
 	public class RenderWindow

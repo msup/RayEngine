@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Plugins
+﻿namespace Plugins
 {
-    public interface IPlugin
-    {
-        string Name { get; set; }
+	public interface IPlugin
+	{
+		string Name
+		{
+			get;
+			set;
+		}
 
-        string Description { get; set; }
+		string Description
+		{
+			get;
+			set;
+		}
 
-        bool IsLoaded { get; set; }
+		bool IsLoaded
+		{
+			get;
+			set;
+		}
 
-        void execute();
-    }
+		void execute();
+	}
 }

@@ -15,7 +15,7 @@ namespace WpfOpenTK
 		private void Application_Startup( object sender, StartupEventArgs e )
 		{
 			// UI Exceptions
-			this.DispatcherUnhandledException += Application_DispatcherUnhandledException;
+			//this.DispatcherUnhandledException += Application_DispatcherUnhandledException;
 
 			// Thread exceptions
 			//AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
@@ -54,7 +54,8 @@ namespace WpfOpenTK
 			}
 			finally
 			{
-				_logger.ErrorException( message, exception );
+				//_logger.ErrorException( message, exception );
+				_logger.ErrorException( exception.InnerException.StackTrace, exception );
 			}
 		}
 	}

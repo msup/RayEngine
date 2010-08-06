@@ -46,7 +46,7 @@
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -76,6 +76,12 @@
     <Reference Include="Emgu.Util, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Fluent">
       <HintPath>DLL-Libraries\Fluent.dll</HintPath>
+    </Reference>
+    <Reference Include="GitSharp">
+      <HintPath>..\..\KMER - HOME transfer\Development - Experimental Application\GitSharp\GitSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GitSharp.Core">
+      <HintPath>..\..\KMER - HOME transfer\Development - Experimental Application\GitSharp\GitSharp.Core.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
@@ -166,7 +172,7 @@
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Data Layer\DataClassifier.cs" />
     <Compile Include="Data Layer\DatasetManager.cs" />
-    <Compile Include="OpenGL\Utils\GLTexture.cs" />
+    <Compile Include="OpenGL\Utils\GLTexture1D.cs" />
     <Compile Include="OpenGL\Utils\GLTexture2D.cs" />
     <Compile Include="Data Layer\IData.cs" />
     <Compile Include="OpenGL\Engine\IRenderEngine.cs" />

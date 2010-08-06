@@ -1,12 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WpfOpenTK;
 
 namespace Data
 {
 	public class RenderingDataset : IRenderingDataset
 	{
-		private List<LookupTable> lstLookUpTables = null;
+		#region private fields
+
 		private List<AlgorithmOptions> lstOptions = null;
+		private List<LookupTable> lstLookUpTables = null;
+
+		#endregion
+
+		#region properties
+
+		public List<LookupTable> LookUpTables
+		{
+			get
+			{
+				return lstLookUpTables;
+			}
+		}
 
 		public VolumetricData Data3D
 		{
@@ -14,19 +29,24 @@ namespace Data
 			set;
 		}
 
+		#endregion
+
 		public RenderingDataset()
 		{
-			//Data3D = new VolumetricData( 200, 200, 100 );
+			Data3D = new VolumetricData();
 
-			//Data3D = new VolumetricData("skull.raw");
-			//Data3D = new VolumetricData("Carp8bit.raw");
-			Data3D = new VolumetricData( "../../Data/VisMale.raw" );
+			LookupTable lut = new LookupTable();
+			lut.Load();
 
-			//Data3D.GenerateRandom();
+			if ( lstLookUpTables == null )
+				lstLookUpTables = new List<LookupTable>();
+
+			lstLookUpTables.Add( lut );
 		}
 
 		public void Load()
 		{
+			throw new NotImplementedException();
 		}
 	}
 }

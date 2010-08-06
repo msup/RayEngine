@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WpfOpenTK
+﻿namespace WpfOpenTK
 {
-    public class UpdateManager
-    {
-    }
+	public class UpdateManager
+	{
+	}
 }

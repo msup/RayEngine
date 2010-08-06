@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using VolumeRenderingEngines;
-using System.Windows;
+﻿using System.Collections.Generic;
 
 namespace WpfOpenTK
 {

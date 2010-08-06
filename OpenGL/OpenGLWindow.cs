@@ -42,16 +42,16 @@ namespace WpfOpenTK
 			renderProgressTimer.Elapsed += new System.Timers.ElapsedEventHandler( renderProgressTimer_Elapsed );
 			renderProgressTimer.AutoReset = false;
 			// Set the Interval to 1000 milliseconds
-			renderProgressTimer.Interval = 5000;
+			renderProgressTimer.Interval = 3000;
 			renderProgressTimer.Enabled = false;
 		}
 
 		private void renderProgressTimer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
 		{
-			if ( renderingStep > 0.0005 )
+			if ( renderingStep > 0.0006 )
 			{
-				renderingStep /= 2;
-				renderProgressTimer.Interval = 1500;
+				renderingStep /= 1.5f;
+				renderProgressTimer.Interval = 500;
 				Invalidate();
 			}
 		}
@@ -68,11 +68,11 @@ namespace WpfOpenTK
 						SwapBuffers();
 						//renderEngine.RotateXYZ();
 					};
-					BeginInvoke( updateIt );
+					Invoke( updateIt );
 				};
 
 				Thread newThread   = new Thread( ts );
-				newThread.Priority = ThreadPriority.Normal;
+				newThread.Priority = ThreadPriority.Lowest;
 				newThread.Name     = "Rendering Thread";
 				newThread.Start();
 			}
@@ -124,6 +124,7 @@ namespace WpfOpenTK
 		private void OpenGLWindow_MarginChanged( object sender, System.EventArgs e )
 		{
 			renderProgressTimer.Enabled = false;
+			renderingStep = 0.02f;
 		}
 
 		private void OpenGLWindow_Resize( object sender, System.EventArgs e )
@@ -132,17 +133,19 @@ namespace WpfOpenTK
 
 			if ( !this.Context.IsCurrent )
 				this.MakeCurrent();
-
-			renderingStep = 0.01f;
-			renderProgressTimer.Enabled = false; // FIXME: true to be working
-			Update();
+			else
+			{
+				renderingStep = 0.02f;
+				renderProgressTimer.Enabled = true; // FIXME: true to be working
+				Update();
+			}
 		}
 
 		private void OpenGLWindow_Paint( object sender, PaintEventArgs e )
 		{
 			Render( renderingStep );
-			renderProgressTimer.Interval = 1000;
-			renderProgressTimer.Enabled  = false; // FIXME: true to be working
+			renderProgressTimer.Interval = 500;
+			renderProgressTimer.Enabled  = true; // FIXME: true to be working
 		}
 
 		#endregion private methods

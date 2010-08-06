@@ -46,7 +46,7 @@ namespace WpfOpenTK.OpenGL.Engine
 			GL.Ortho( -10, 10, -10, 10, -25, 25 ); // Bottom-left corner pixel has coordinate (0, 0)
 			GL.Viewport( 0, 0, width, height ); // Use all of the glControl painting area
 
-			#endregion
+			#endregion Projection Setup
 
 			#region Render Setup
 
@@ -58,7 +58,7 @@ namespace WpfOpenTK.OpenGL.Engine
 			GL.Rotate( +45, 1, 0, 0 );
 			GL.Rotate( angle, 0, 1, 0 );
 
-			#endregion
+			#endregion Render Setup
 
 			Random rand = new Random();
 
@@ -119,7 +119,7 @@ namespace WpfOpenTK.OpenGL.Engine
 		{
 		}
 
-		#endregion
+		#endregion IRenderEngine Members
 
 		#region IPlugin Members
 
@@ -146,6 +146,6 @@ namespace WpfOpenTK.OpenGL.Engine
 			throw new NotImplementedException();
 		}
 
-		#endregion
+		#endregion IPlugin Members
 	}
 }
