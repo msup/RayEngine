@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Plugin;
-using VolumeRenderingEngines;
+using WpfOpenTK.OpenGL.Engine;
 
 namespace WpfOpenTK.User_Controls
 {
@@ -11,6 +11,7 @@ namespace WpfOpenTK.User_Controls
 	/// </summary>
 	public partial class ModelOrientationControl : UserControl
 	{
+		// FIXME: change to xaml initialization
 		private IRenderEngine renderPlugin;
 		private delegate void renderDelegate();
 
@@ -44,6 +45,12 @@ namespace WpfOpenTK.User_Controls
 				newThread.Priority = ThreadPriority.BelowNormal;
 				newThread.Start();
 			}
+		}
+
+		private void btnScreenshot_Click( object sender, RoutedEventArgs e )
+		{
+			var engine = renderPlugin as RayCaster;
+			engine.GrapScreenshot();
 		}
 	}
 }

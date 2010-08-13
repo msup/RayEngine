@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK
 {
@@ -67,16 +68,22 @@ namespace WpfOpenTK
 			GL.UseProgram( 0 );
 		}
 
-		public void setUniform1( string uniformVariable, int value )
+		public void SetUniform1( string uniformVariable, int value )
 		{
 			var uniformLocation = GL.GetUniformLocation( ShaderProgramHandle, uniformVariable );
 			GL.Uniform1( uniformLocation, value );
 		}
 
-		public void setUniform1( string uniformVariable, float value )
+		public void SetUniform1( string uniformVariable, float value )
 		{
 			int uniformLocation = GL.GetUniformLocation( ShaderProgramHandle, uniformVariable );
 			GL.Uniform1( uniformLocation, value );
+		}
+
+		public void SetUniform3( string uniformVariable, Vector3 value )
+		{
+			int uniformLocation = GL.GetUniformLocation( ShaderProgramHandle, uniformVariable );
+			GL.Uniform3( uniformLocation, value );
 		}
 
 		#endregion Methods

@@ -8,7 +8,6 @@ using AvalonDock;
 using Data;
 using Plugin;
 using Plugins;
-using VolumeRenderingEngines;
 using WpfOpenTK.OpenGL.Engine;
 using WpfOpenTK.User_Controls;
 

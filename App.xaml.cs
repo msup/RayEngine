@@ -10,12 +10,40 @@ namespace WpfOpenTK
 	/// </summary>
 	public partial class App : Application
 	{
-		private readonly Logger _logger = LogManager.GetLogger( "App" );
+		private readonly Logger mLogger = LogManager.GetLogger( "App" );
 
 		private void Application_Startup( object sender, StartupEventArgs e )
 		{
+			//MailMessage mailMessage = new MailMessage();
+			//mailMessage.To.Add( "someone@somewhere.com" );
+			//mailMessage.Subject = "Test";
+			//mailMessage.Body = "<html><body>This is a test</body></html>";
+			//mailMessage.IsBodyHtml = true;
+
+			//// Create the credentials to login to the gmail account associated with my custom domain
+			//string sendEmailsFrom = "marek.suplata@gmail.com";
+			//string sendEmailsFromPassword = "bravoechojednajednaavgmHP!";
+			//NetworkCredential cred = new NetworkCredential( sendEmailsFrom, sendEmailsFromPassword );
+
+			//SmtpClient mailClient = new SmtpClient( "smtp.gmail.com", 587 );
+			//mailClient.EnableSsl = true;
+			//mailClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+			//mailClient.UseDefaultCredentials = false;
+			//mailClient.Timeout = 20000;
+			//mailClient.Credentials = cred;
+
+			//var message = new MailMessage();
+			//// here is an important part:
+			//message.From = new MailAddress( "marek.suplata@gmail.com", "Mailer" );
+			//// it's superfluous part here since from address is defined in .config file
+			//// in my example. But since you don't use .config file, you will need it.
+
+			////mailClient.Send( mailMessage );
+			//mailClient.EnableSsl = true;
+			//mailClient.Send( message );
+
 			// UI Exceptions
-			//this.DispatcherUnhandledException += Application_DispatcherUnhandledException;
+			this.DispatcherUnhandledException += Application_DispatcherUnhandledException;
 
 			// Thread exceptions
 			//AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
@@ -25,7 +53,7 @@ namespace WpfOpenTK
 
 		private void Application_DispatcherUnhandledException( object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e )
 		{
-			e.Handled = false;
+			e.Handled = true;
 			var exception = e.Exception;
 			HandleUnhandledException( exception );
 		}
@@ -35,27 +63,25 @@ namespace WpfOpenTK
 			HandleUnhandledException( unhandledExceptionEventArgs.ExceptionObject as Exception );
 			if ( unhandledExceptionEventArgs.IsTerminating )
 			{
-				_logger.Info( "Application is terminating due to an unhandled exception in a secondary thread." );
+				mLogger.Info( "Application is terminating due to an unhandled exception in a secondary thread." );
 			}
 		}
 
 		private void HandleUnhandledException( Exception exception )
 		{
-			string message = "Unhandled exception";
 			try
 			{
 				AssemblyName assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName();
-				message = string.Format( "Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version );
-				_logger.Error( message );
+				string message = string.Format( "Unhandled exception in {0} v{1}", assemblyName.Name, assemblyName.Version );
+				mLogger.Error( message );
 			}
 			catch ( Exception exc )
 			{
-				_logger.ErrorException( "Exception in unhandled exception handler", exc );
+				mLogger.ErrorException( "Exception in unhandled exception handler", exc );
 			}
 			finally
 			{
-				//_logger.ErrorException( message, exception );
-				_logger.ErrorException( exception.InnerException.StackTrace, exception );
+				mLogger.ErrorException( exception.InnerException.StackTrace, exception );
 			}
 		}
 	}

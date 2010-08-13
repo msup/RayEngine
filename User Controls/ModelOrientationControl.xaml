@@ -124,7 +124,9 @@
 		<Label Content="{Binding ElementName=sldYaxis, Path=Value}"  Margin="0,72,12,162" Name="label6" Style="{StaticResource LabelStyler}" Grid.Row="1" HorizontalAlignment="Right" Height="24" Width="48" Grid.Column="2" />
 		<Label Content="{Binding ElementName=sldZaxis, Path=Value}"  Margin="0,109,12,127" Name="label7" Style="{StaticResource LabelStyler}" Grid.Row="1" HorizontalAlignment="Right" Width="48" Grid.Column="2" />
 
-		<Button Content="Render" Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="23,150,0,0" Name="btnRender" VerticalAlignment="Top" Width="75" Click="btnRender_Click" Grid.ColumnSpan="2">
+		<Button Content="Screenshot" Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="23,150,0,0" Name="btnScreenshot" VerticalAlignment="Top" Width="75"  Grid.ColumnSpan="2" Click="btnScreenshot_Click" />
+
+		<Button Content="Render" Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="38,150,0,0" Name="btnRender" VerticalAlignment="Top" Width="75" Click="btnRender_Click" Grid.Column="1">
 			<!--<Button.Background>
 				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 					<GradientStop Color="#FF000000" Offset="0"/>

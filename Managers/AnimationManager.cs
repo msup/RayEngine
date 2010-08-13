@@ -2,7 +2,7 @@
 using System.Windows.Threading;
 using OpenTK;
 using Plugin;
-using VolumeRenderingEngines;
+using WpfOpenTK.OpenGL.Engine;
 
 namespace WpfOpenTK
 {

@@ -5,149 +5,207 @@ using System.Threading;
 using System.Windows.Forms;
 using OpenTK;
 using Plugin;
-using VolumeRenderingEngines;
+using WpfOpenTK.OpenGL.Engine;
 
 namespace WpfOpenTK
-{
-	public partial class OpenGLWindow : GLControl
-	{
-		#region private fields
+    {
+    public partial class OpenGLWindow : GLControl
+        {
+        #region private fields
 
-		private AnimationManager animationManager = new AnimationManager();
-		private IRenderEngine renderEngine = null;
-		private ShaderManager shaderManager = null;
-		private List<string> shaderList = null;
-		private System.Timers.Timer renderProgressTimer = null;
+        private AnimationManager animationManager = new AnimationManager();
+        private IRenderEngine renderEngine = null;
+        private ShaderManager shaderManager = null;
+        private List<string> shaderList = null;
+        private System.Timers.Timer renderProgressTimer = null;
+        private Thread renderThread = null;
 
-		#endregion private fields
+        #endregion private fields
 
-		// TODO:
-		//' FIXME
-		// this remove to different class
-		float renderingStep = 1.0f;
+        // TODO:
+        //' FIXME
+        // this remove to different class
+        float renderingStep = 1.0f;
+        private int actRenderStep = 0;
+        private bool loaded = false;
 
-		#region public methods
+        #region public methods
 
-		public OpenGLWindow()
-		{
-			InitializeComponent();
+        public OpenGLWindow()
+            {
+            InitializeComponent();
 
-			MakeCurrent();
+            MakeCurrent();
 
-			shaderManager = new ShaderManager();
-			shaderManager.createProgram( @"" );
+            shaderManager = new ShaderManager();
+            shaderManager.createProgram( @"" );
 
-			// this timer allow progressie enhancement of rendered image if no interaction in window detected
-			renderProgressTimer = new System.Timers.Timer();
-			renderProgressTimer.Elapsed += new System.Timers.ElapsedEventHandler( renderProgressTimer_Elapsed );
-			renderProgressTimer.AutoReset = false;
-			// Set the Interval to 1000 milliseconds
-			renderProgressTimer.Interval = 3000;
-			renderProgressTimer.Enabled = false;
-		}
+            // this timer allow progressie enhancement of rendered image if no interaction in window detected
+            renderProgressTimer = new System.Timers.Timer();
+            renderProgressTimer.Elapsed += new System.Timers.ElapsedEventHandler( renderProgressTimer_Elapsed );
+            renderProgressTimer.AutoReset = false;
+            // Set the Interval to 1000 milliseconds
+            renderProgressTimer.Interval = 1000;
+            renderProgressTimer.Enabled = false;
 
-		private void renderProgressTimer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
-		{
-			if ( renderingStep > 0.0006 )
-			{
-				renderingStep /= 1.5f;
-				renderProgressTimer.Interval = 500;
-				Invalidate();
-			}
-		}
+            actRenderStep = 0;
+            }
 
-		public void Render( float renderingStep )
-		{
-			lock ( this )
-			{
-				ThreadStart ts = delegate
-				{
-					MethodInvoker updateIt = delegate
-					{
-						renderEngine.Render( Width, Height, this, renderingStep );
-						SwapBuffers();
-						//renderEngine.RotateXYZ();
-					};
-					Invoke( updateIt );
-				};
+        private void renderProgressTimer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
+            {
+            //if ( renderingStep > 0.001 )
+            //{
+            //    renderingStep /= 1.5f;
+            //    renderProgressTimer.Interval = 500;
+            //    Invalidate();
+            //}
 
-				Thread newThread   = new Thread( ts );
-				newThread.Priority = ThreadPriority.Lowest;
-				newThread.Name     = "Rendering Thread";
-				newThread.Start();
-			}
-		}
+            List<float> Steps = new List<float>()
+                                    {
+                                        0.1f,
+                                        0.05f,
+                                        0.01f,
+                                        0.005f,
+                                        0.001f,
+                                        0.0008f,
+                                        0.0004f,
+                                        0.00005f,
+                                        //0.0001f,
+                                        //0.00008f,
+                                        //0.00005f,
+                                        //0.00002f
+                                    };
 
-		public void SetRenderingMethod( IRenderEngine _renderEngine )
-		{
-			renderEngine = _renderEngine;
+            renderingStep = Steps[actRenderStep];
+            if ( actRenderStep < Steps.Count - 1 )
+                {
+                actRenderStep += 1;
+                renderProgressTimer.Interval = 750;
+                var msg = "Render step: " + Steps[actRenderStep].ToString();
+                Trace.WriteLine( msg );
+                Invalidate();
+                }
+            }
 
-			RayCaster Engine = renderEngine as RayCaster;
-			if ( Engine != null )
-				Engine.ShaderPrograms = shaderManager.ShaderPrograms;
+        public void Render( float renderingStep )
+            {
+            lock ( this )
+                {
+                ThreadStart ts = delegate
+                                     {
+                                         MethodInvoker updateIt = delegate
+                                                                      {
+                                                                          renderEngine.Render( Width, Height, this,
+                                                                                              renderingStep );
+                                                                          renderEngine.RotateXYZ();
+                                                                          SwapBuffers();
+                                                                      };
+                                         Invoke( updateIt );
+                                     };
 
-			//animationManager.setup( this, renderEngine );
-		}
+                //if ( renderThread == null )
+                    {
+                    renderThread = new Thread( ts );
+                    renderThread.Priority = ThreadPriority.Lowest;
+                    renderThread.Name = "Rendering Thread";
+                    renderThread.Start();
+                    }
+                /*else if ( renderThread.IsAlive == true )
+                    {
+                    actRenderStep -= 1;
+                    renderProgressTimer.Interval = 1000;
+                    //renderThread.Join();
+                    //renderProgressTimer.Enabled = true;
+                    }
+                else
+                    {
+                    renderThread.Priority = ThreadPriority.Lowest;
+                    renderThread.Name = "Rendering Thread";
+                    renderThread.Start();
+                    }*/
+                }
+            }
 
-		public void SetShaderList( List<string> list )
-		{
-			shaderList = list;
-		}
+        public void SetRenderingMethod( IRenderEngine _renderEngine )
+            {
+            renderEngine = _renderEngine;
 
-		#endregion public methods
+            RayCaster Engine = renderEngine as RayCaster;
+            if ( Engine != null )
+                Engine.ShaderPrograms = shaderManager.ShaderPrograms;
 
-		#region private methods
+            //animationManager.setup( this, renderEngine );
+            }
 
-		private void InitializeComponent()
-		{
-			this.SuspendLayout();
+        public void SetShaderList( List<string> list )
+            {
+            shaderList = list;
+            }
 
-			this.Size                = new System.Drawing.Size( 443, 247 );
-			this.Load               += new System.EventHandler( this.OpenGLWindow_Load );
-			this.Paint              += new System.Windows.Forms.PaintEventHandler( this.OpenGLWindow_Paint );
-			this.Resize             += new EventHandler( OpenGLWindow_Resize );
-			this.SizeChanged         += new EventHandler( OpenGLWindow_MarginChanged );
+        #endregion public methods
 
-			this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 13F );
-			this.Name                = "OpenGLWindow";
+        #region private methods
 
-			this.ResumeLayout( false );
+        private void InitializeComponent()
+            {
+            this.SuspendLayout();
 
-			this.Invalidate();
-			this.Update();
-		}
+            this.Size                = new System.Drawing.Size( 443, 247 );
+            this.Load               += new System.EventHandler( this.OpenGLWindow_Load );
+            this.Paint              += new System.Windows.Forms.PaintEventHandler( this.OpenGLWindow_Paint );
+            this.Resize             += new EventHandler( OpenGLWindow_Resize );
+            this.SizeChanged         += new EventHandler( OpenGLWindow_MarginChanged );
 
-		private void OpenGLWindow_Load( object sender, System.EventArgs e )
-		{
-		}
+            this.AutoScaleDimensions = new System.Drawing.SizeF( 6F, 13F );
+            this.Name                = "OpenGLWindow";
 
-		private void OpenGLWindow_MarginChanged( object sender, System.EventArgs e )
-		{
-			renderProgressTimer.Enabled = false;
-			renderingStep = 0.02f;
-		}
+            this.ResumeLayout( false );
 
-		private void OpenGLWindow_Resize( object sender, System.EventArgs e )
-		{
-			Debug.WriteLine( "{0} {1}", this.Width, this.Height );
+            //this.Invalidate();
+            //this.Update();
+            }
 
-			if ( !this.Context.IsCurrent )
-				this.MakeCurrent();
-			else
-			{
-				renderingStep = 0.02f;
-				renderProgressTimer.Enabled = true; // FIXME: true to be working
-				Update();
-			}
-		}
+        private void OpenGLWindow_Load( object sender, System.EventArgs e )
+            {
+            loaded = true;
+            }
 
-		private void OpenGLWindow_Paint( object sender, PaintEventArgs e )
-		{
-			Render( renderingStep );
-			renderProgressTimer.Interval = 500;
-			renderProgressTimer.Enabled  = true; // FIXME: true to be working
-		}
+        private void OpenGLWindow_MarginChanged( object sender, System.EventArgs e )
+            {
+            renderProgressTimer.Enabled = false;
+            //renderingStep = 0.02f;
+            actRenderStep = 0;
+            }
 
-		#endregion private methods
-	}
-}
+        private void OpenGLWindow_Resize( object sender, System.EventArgs e )
+            {
+            if ( !loaded )
+                return;
+
+            Debug.WriteLine( "{0} {1}", this.Width, this.Height );
+
+            if ( !this.Context.IsCurrent )
+                this.MakeCurrent();
+            else
+                {
+                //renderingStep = 0.02f;
+                actRenderStep = 0;
+                renderProgressTimer.Enabled = false;
+                renderProgressTimer.Interval = 100;
+                renderProgressTimer.Enabled = true; // FIXME: true to be working
+                Update();
+                }
+            }
+
+        private void OpenGLWindow_Paint( object sender, PaintEventArgs e )
+            {
+            Render( renderingStep );
+            renderProgressTimer.Interval = 500;
+
+            renderProgressTimer.Enabled = false;
+            renderProgressTimer.Enabled  = true; // FIXME: true to be working
+            }
+
+        #endregion private methods
+        }
+    }

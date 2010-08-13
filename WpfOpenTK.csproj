@@ -133,6 +133,7 @@
     <Compile Include="OpenGL\Engine\MarchingCubes.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="OpenGL\Engine\RenderingParameter.cs" />
     <Compile Include="User Controls\ModelOrientationControl.xaml.cs">
       <DependentUpon>ModelOrientationControl.xaml</DependentUpon>
     </Compile>

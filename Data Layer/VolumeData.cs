@@ -133,19 +133,19 @@ namespace Data
 				for ( int j = 0; j < data.Width - 1; ++j )
 					for ( int k = 0; k < data.Depth; ++k )
 						XDifferences.Volume[i, j, k]
-                            =
-                            data.Volume[i, j, k]
-                            -
-                            data.Volume[i, j + 1, k];
+							=
+							data.Volume[i, j, k]
+							-
+							data.Volume[i, j + 1, k];
 
 			for ( int i = 0; i < data.Height - 1; ++i )
 				for ( int j = 0; j < data.Width; ++j )
 					for ( int k = 0; k < data.Depth; ++k )
 						YDifferences.Volume[i, j, k]
-                            =
-                            data.Volume[i, j, k]
-                            -
-                            data.Volume[i + 1, j, k];
+							=
+							data.Volume[i, j, k]
+							-
+							data.Volume[i + 1, j, k];
 
 			VolumeData[] set = new VolumeData[2];
 			set[0] = XDifferences;
@@ -374,10 +374,10 @@ namespace Data
 					for ( int k = 0; k < data1.Depth; ++k )
 
 						temp.Volume[i, j, k]
-                            =
-                            data1.Volume[i, j, k]
-                            *
-                            data2.Volume[i, j, k];
+							=
+							data1.Volume[i, j, k]
+							*
+							data2.Volume[i, j, k];
 
 			return temp;
 		}
@@ -391,10 +391,10 @@ namespace Data
 					for ( int k = 0; k < data2.Depth; ++k )
 
 						temp.Volume[i, j, k]
-                            =
-                            c
-                            *
-                            data2.Volume[i, j, k];
+							=
+							c
+							*
+							data2.Volume[i, j, k];
 
 			return temp;
 		}
@@ -408,10 +408,10 @@ namespace Data
 					for ( int k = 0; k < data1.Depth; ++k )
 
 						temp.Volume[i, j, k]
-                            =
-                            data1.Volume[i, j, k]
-                            -
-                            data2.Volume[i, j, k];
+							=
+							data1.Volume[i, j, k]
+							-
+							data2.Volume[i, j, k];
 
 			return temp;
 		}
@@ -425,10 +425,10 @@ namespace Data
 					for ( int k = 0; k < data1.Depth; ++k )
 
 						temp.Volume[i, j, k]
-                            =
-                            data1.Volume[i, j, k]
-                            +
-                            data2.Volume[i, j, k];
+							=
+							data1.Volume[i, j, k]
+							+
+							data2.Volume[i, j, k];
 
 			return temp;
 		}

@@ -1,18 +1,59 @@
 <Configuration>
   <RecentFiles>
     <RecentFiles>
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="9797" fromTop="43" />
       <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/f:MainWindow.xaml.cs" caret="658" fromTop="0" />
       <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:User Controls/f:ModelOrientationControl.xaml" caret="3590" fromTop="7" />
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Utils/f:FrameBufferObject.cs" caret="138" fromTop="7" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:DataClassifier.cs" caret="165" fromTop="12" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:DatasetManager.cs" caret="47" fromTop="1" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:IData.cs" caret="0" fromTop="0" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:IRenderingDataset.cs" caret="0" fromTop="0" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:RenderingDataset.cs" caret="497" fromTop="24" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Managers/f:DockManager.cs" caret="69" fromTop="4" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Utils/f:Texture3D.cs" caret="2909" fromTop="5" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:VolumeData.cs" caret="36" fromTop="0" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:VolumetricData.cs" caret="251" fromTop="8" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/f:app.config" caret="570" fromTop="17" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Utils/f:ShaderProgram.cs" caret="1773" fromTop="42" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Utils/f:FrameBufferObject.cs" caret="761" fromTop="0" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/f:App.xaml.cs" caret="1667" fromTop="43" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Managers/f:AnimationManager.cs" caret="42" fromTop="0" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RenderingParameter.cs" caret="297" fromTop="12" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:LookUpTable.cs" caret="1283" fromTop="18" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="4659" fromTop="53" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/f:OpenGLWindow.cs" caret="2495" fromTop="25" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="7978" fromTop="29" />
     </RecentFiles>
     <RecentEdits>
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="9797" fromTop="0" />
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="9797" fromTop="13" />
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="9801" fromTop="43" />
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:User Controls/f:ModelOrientationControl.xaml" caret="3590" fromTop="7" />
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Utils/f:FrameBufferObject.cs" caret="4597" fromTop="132" />
-      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Utils/f:FrameBufferObject.cs" caret="124" fromTop="6" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="7806" fromTop="17" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="7573" fromTop="11" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="9403" fromTop="28" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="8793" fromTop="13" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/f:OpenGLWindow.cs" caret="7263" fromTop="36" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/f:OpenGLWindow.cs" caret="2956" fromTop="25" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/f:OpenGLWindow.cs" caret="1582" fromTop="1" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="5329" fromTop="7" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="3160" fromTop="34" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="10669" fromTop="25" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="10623" fromTop="22" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="5584" fromTop="13" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/d:Engine/f:RayCaster.cs" caret="5134" fromTop="4" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="6108" fromTop="30" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="9988" fromTop="20" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="10501" fromTop="18" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="10906" fromTop="33" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="6587" fromTop="44" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:LookUpTable.cs" caret="1937" fromTop="25" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:LookUpTable.cs" caret="1933" fromTop="33" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="2568" fromTop="12" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="3402" fromTop="31" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Data Layer/f:LookUpTable.cs" caret="1283" fromTop="18" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="8502" fromTop="20" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="9658" fromTop="47" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="9143" fromTop="23" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="3068" fromTop="4" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:OpenGL/f:OpenGLWindow.cs" caret="2486" fromTop="25" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="3616" fromTop="22" />
+      <File id="797B29C8-2AD1-47F2-90FB-3B85F572B958/d:Shaders/f:shader.frag.c" caret="7978" fromTop="29" />
     </RecentEdits>
   </RecentFiles>
   <NAntValidationSettings>
@@ -30,7 +71,7 @@
     <string />
     <integer />
     <boolean>
-      <setting name="SolutionAnalysisEnabled">True</setting>
+      <setting name="SolutionAnalysisEnabled">False</setting>
     </boolean>
   </SettingsComponent>
   <CompletionStatisticsManager>
@@ -42,9 +83,12 @@
       <Item value="glError" priority="0" />
       <Item value="NoError" priority="0" />
       <Item value="throw" priority="0" />
-      <Item value="new" priority="0" />
+      <Item value="new" priority="1" />
       <Item value="Exception" priority="0" />
       <Item value="var" priority="0" />
+      <Item value="NoClosingBracketException" priority="0" />
+      <Item value="NotImplementedException" priority="0" />
+      <Item value="i" priority="0" />
     </ItemStatistics>
   </CompletionStatisticsManager>
 </Configuration>
