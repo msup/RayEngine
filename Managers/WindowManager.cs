@@ -128,20 +128,21 @@ namespace WpfOpenTK
 
 			//} );
 
-			dockPane.Items.Add( new DockableContent()
-			{
-				Name = "classesContent",
-				Title = "Logs",
-			} );
+            //dockPane.Items.Add( new DockableContent()
+            //{
+            //    Name = "classesContent",
+            //    Title = "Logs",
+                
+            //} );
 
-			var logDockPane = new DockablePane();
+            //var logDockPane = new DockablePane();
 
-			logDockPane.Items.Add( new DockableContent()
-			{
-				Name = "classesContent",
-				Title = "Logs",
-			}
-			);
+            //logDockPane.Items.Add( new DockableContent()
+            //{
+            //    Name = "classesContent",
+            //    Title = "Logs",
+            //}
+            //);
 
 			//resVerticalPanel.Children.Add( logDockPane );
 

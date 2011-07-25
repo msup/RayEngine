@@ -4,8 +4,8 @@
 	xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent"
 	xmlns:ad="clr-namespace:AvalonDock;assembly=AvalonDock"
 	Title="Raycasting Demo"
-	Width="701"
-	Height="318"
+	Width="696"
+	Height="538"
 	Background="#FFEBEDF0"
 	>
 
@@ -42,9 +42,9 @@
 			</Fluent:RibbonTabItem>
 
 			<!--Backstage Items-->
-			<Fluent:Ribbon.BackstageItems>
+			<!--<Fluent:Ribbon.BackstageItems>
 
-			</Fluent:Ribbon.BackstageItems>
+			</Fluent:Ribbon.BackstageItems>-->
 		</Fluent:Ribbon>
 
 		<ad:DockingManager x:Name="dockingManager" Grid.Row="1">

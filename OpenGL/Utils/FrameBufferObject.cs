@@ -14,7 +14,7 @@ namespace WpfOpenTK.OpenGL.Utils
         private readonly uint fbo_handle;
         private uint mDepthBuffer;
         private bool mDetached;
-        private uint mFboTexture;
+        public uint mFboTexture;
         private int mHeight;
         private int mWidth;
         private TextureUnit textureUnit;
@@ -46,6 +46,9 @@ namespace WpfOpenTK.OpenGL.Utils
 
         public void ChangeResolution( int width, int height, TextureUnit textureUnit, string description )
             {
+
+            //Detach(); // monster crash fix ?
+
             SetFrameBufferHandles( width, height, textureUnit, description );
 
             Detach();
@@ -59,6 +62,13 @@ namespace WpfOpenTK.OpenGL.Utils
             GL.BindTexture( TextureTarget.Texture2D, mFboTexture );
             }
 
+        public void UnbindTextureFromTextureUnit()
+        {
+            GL.ActiveTexture( textureUnit );
+            GL.BindTexture( TextureTarget.Texture2D, 0 );
+        }
+
+
         public void Attach()
             {
             mDetached = false;
@@ -70,7 +80,7 @@ namespace WpfOpenTK.OpenGL.Utils
 
         public void Detach()
             {
-            if ( mDetached == false )
+            //if ( mDetached == false )
                 {
                 mDetached = true;
                 GL.Ext.BindFramebuffer( FramebufferTarget.FramebufferExt, 0 ); // Move back to the default framebuffer.
@@ -85,6 +95,7 @@ namespace WpfOpenTK.OpenGL.Utils
             BitmapData data = bitmap.LockBits( new Rectangle( 0, 0, mWidth, mHeight ),
                                                ImageLockMode.WriteOnly,
                                                PixelFormat.Format32bppArgb );
+
 
             GL.ReadBuffer( (ReadBufferMode) FramebufferAttachment.ColorAttachment0Ext ); // Set up where to read the pixels from.
 
@@ -118,8 +129,8 @@ namespace WpfOpenTK.OpenGL.Utils
             GL.BindTexture( TextureTarget.Texture2D, mFboTexture );
             GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear );
             GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear );
-            GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Clamp );
-            GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.Clamp );
+            //GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Clamp );
+            //GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.Clamp );
 
             GL.TexImage2D( TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8,
                            mWidth, mHeight, 0,
@@ -136,6 +147,15 @@ namespace WpfOpenTK.OpenGL.Utils
                 }
 
             GL.BindTexture( TextureTarget.Texture2D, 0 ); // prevent feedback, reading and writing to the same image is a bad idea
+
+            glError = GL.GetError();
+            if ( glError != ErrorCode.NoError )
+                {
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Error( glError.ToString() + "Frame Buffer Object - texture binding failed" );
+                throw new Exception( "Frame Buffer Object - texture binding failed" );
+                }
+
 
             #region depth buffer setup
 
@@ -154,10 +174,12 @@ namespace WpfOpenTK.OpenGL.Utils
             textureUnit = TextureUnit;
             Description = description;
 
-            if ( Description.CompareTo( "back" ) == 0 )
+            if(Description.CompareTo( "back" ) == 0)
                 mFboTexture = 1;
-            else if ( Description.CompareTo( "front" ) == 0 )
+            else if(Description.CompareTo( "front" ) == 0)
                 mFboTexture = 2;
+            else
+                mFboTexture = 4;
             }
 
         #endregion private functions

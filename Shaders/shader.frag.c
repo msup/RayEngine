@@ -20,6 +20,8 @@ uniform float DiffuseLightCoeff;
 uniform vec3 SpecularLightColor;
 uniform float SpecularLightCoeff;
 uniform float SpecularPowerFactor;
+
+
 //vec3 vLightSpecular         = vec3(1.0,1.0,1.0);
 vec3 LightDir               = vec3(0.0,0.5,0.5);
 

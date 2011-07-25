@@ -65,27 +65,28 @@
     <StartupObject>WpfOpenTK.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AvalonDock, Version=1.3.3384.0, Culture=neutral, PublicKeyToken=85a1e0ada7ec13e4, processorArchitecture=MSIL">
+    <Reference Include="AvalonDock, Version=1.3.3571.0, Culture=neutral, PublicKeyToken=85a1e0ada7ec13e4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Program Files (x86)\WPF_controls\AvalonDock 1.3 (Build 3384)\AvalonDock.dll</HintPath>
+      <HintPath>Libraries\AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="AvalonDock.Themes">
-      <HintPath>C:\Program Files (x86)\WPF_controls\AvalonDock 1.3 (Build 3384)\AvalonDock.Themes.dll</HintPath>
+    <Reference Include="AvalonDock.Themes, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\AvalonDock.Themes.dll</HintPath>
     </Reference>
-    <Reference Include="Emgu.CV, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
-    <Reference Include="Emgu.Util, Version=2.1.0.779, Culture=neutral, PublicKeyToken=7281126722ab4438, processorArchitecture=MSIL" />
     <Reference Include="Fluent">
-      <HintPath>DLL-Libraries\Fluent.dll</HintPath>
+      <HintPath>Libraries\Fluent\Debug\Fluent.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GitSharp">
-      <HintPath>..\..\KMER - HOME transfer\Development - Experimental Application\GitSharp\GitSharp.dll</HintPath>
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files\NLog\.NET Framework 4.0\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="GitSharp.Core">
-      <HintPath>..\..\KMER - HOME transfer\Development - Experimental Application\GitSharp\GitSharp.Core.dll</HintPath>
+    <Reference Include="OpenTK">
+      <HintPath>C:\Program Files\OpenTK\Binaries\OpenTK\Release\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=1.0.0.505, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
-    <Reference Include="OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
-    <Reference Include="OpenTK.GLControl, Version=1.0.0.201, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>C:\Program Files\OpenTK\Binaries\OpenTK\Release\OpenTK.GLControl.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -214,7 +215,6 @@
     <Compile Include="OpenGL\Utils\ShaderManager.cs" />
     <Compile Include="OpenGL\Utils\ShaderProgram.cs" />
     <Compile Include="Managers\UpdateManager.cs" />
-    <Compile Include="Data Layer\VolumeData.cs" />
     <Compile Include="Managers\WindowManager.cs" />
     <EmbeddedResource Include="OpenGL\OpenGLWindow.resx">
       <DependentUpon>OpenGLWindow.cs</DependentUpon>
@@ -241,6 +241,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Content Include="Shaders\simple.frag.c">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\shader.frag.c">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

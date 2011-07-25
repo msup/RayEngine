@@ -53,6 +53,9 @@ namespace WpfOpenTK.OpenGL.Utils
 							   PixelType.Byte,
 							   textureData );
 
+
+       
+
 			GL.BindTexture( TextureTarget.Texture3D, 0 );
 		}
 

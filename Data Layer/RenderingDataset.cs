@@ -36,8 +36,9 @@ namespace Data
 			Data3D = new VolumetricData();
 
 			LookupTable lut = new LookupTable();
-			lut.Load();
-
+            lut.Load();
+            lut.Load( "lut1.png" );
+            
 			if ( lstLookUpTables == null )
 				lstLookUpTables = new List<LookupTable>();
 

@@ -9,69 +9,71 @@ using Plugin;
 using WpfOpenTK.OpenGL.Utils;
 
 namespace WpfOpenTK.OpenGL.Engine
-    {
+{
     class RayCaster : IRenderEngine, IOrientation
-        {
+    {
         #region Fields (3)
 
         private Dictionary<RenderingParameter, object> mRenderingParameters = null;
 
-        int mWidthOld                          = 0;
-        int mHeightOld                         = 0;
-        private float mAngleX                  = 0.0f;
-        private float mAngleY                  = 0.0f;
-        private float mAngleZ                  = 0.0f;
-        private float mTranslateZ              = 0.0f;
-        private float mAngle                   = 1.5f;
+        int mWidthOld = 0;
+        int mHeightOld = 0;
+        private float mAngleX = 0.0f;
+        private float mAngleY = 0.0f;
+        private float mAngleZ = 0.0f;
+        private float mTranslateZ = 0.0f;
+        private float mAngle = 1.5f;
 
-        DatasetManager mDatasetManager         = null;
-        FrameBufferObject mBackSide            = null;
-        FrameBufferObject mFrontSide           = null;
-        GLControl mOpenglControl               = null;
+        DatasetManager mDatasetManager = null;
+        FrameBufferObject mBackSide = null;
+        FrameBufferObject mFrontSide = null;
+        FrameBufferObject mTempFBO = null;
 
-        GlTexture3D mVolumeTexture                  = null;
-        GLTexture1D mClassificationTexture          = null;
+        GLControl mOpenglControl = null;
+
+        GlTexture3D mVolumeTexture = null;
+        GLTexture1D mClassificationTexture = null;
 
         public List<ShaderProgram> ShaderPrograms
-            {
+        {
             get;
             set;
-            }
+        }
 
         private List<string> shaderPaths = new List<string>();
 
         private bool firstRun = true;
 
         public List<string> ShaderPaths
-            {
+        {
             get
-                {
+            {
                 return shaderPaths;
-                }
-            set
-                {
-                shaderPaths = value;
-                }
             }
+            set
+            {
+                shaderPaths = value;
+            }
+        }
 
         public string Name
-            {
+        {
             get;
             set;
-            }
+        }
 
         public string Description
-            {
+        {
             get;
             set;
-            }
+        }
 
         #endregion Fields
 
         #region Constructors (1)
 
         public RayCaster( DatasetManager datasetManager )
-            {
+        {
             ShaderPrograms = null;
             mRenderingParameters = new Dictionary<RenderingParameter, object>
                                     {
@@ -92,9 +94,9 @@ namespace WpfOpenTK.OpenGL.Engine
 
             var configurationAppSettings = new System.Configuration.AppSettingsReader();
 
-            mAngleX     = (float) configurationAppSettings.GetValue( "RotateX", typeof( float ) );
-            mAngleY     = (float) configurationAppSettings.GetValue( "RotateY", typeof( float ) );
-            mAngleZ     = (float) configurationAppSettings.GetValue( "RotateZ", typeof( float ) );
+            mAngleX = (float) configurationAppSettings.GetValue( "RotateX", typeof( float ) );
+            mAngleY = (float) configurationAppSettings.GetValue( "RotateY", typeof( float ) );
+            mAngleZ = (float) configurationAppSettings.GetValue( "RotateZ", typeof( float ) );
             mTranslateZ = (float) configurationAppSettings.GetValue( "TranslateZ", typeof( float ) );
 
             // NOTE: what for is this path?
@@ -102,7 +104,7 @@ namespace WpfOpenTK.OpenGL.Engine
             LocateShaders();
 
             this.mDatasetManager = datasetManager;
-            }
+        }
 
         #endregion Constructors
 
@@ -115,34 +117,34 @@ namespace WpfOpenTK.OpenGL.Engine
         //}
 
         public IRenderingDataset VolumeData
-            {
+        {
             get;
             set;
-            }
+        }
 
         public bool IsLoaded
-            {
+        {
             get;
             set;
-            }
+        }
 
         public double xAxis
-            {
+        {
             get;
             set;
-            }
+        }
 
         public double yAxis
-            {
+        {
             get;
             set;
-            }
+        }
 
         public double zAxis
-            {
+        {
             get;
             set;
-            }
+        }
 
         #endregion Properties
 
@@ -150,67 +152,63 @@ namespace WpfOpenTK.OpenGL.Engine
 
         // Public Methods (1) 
         public void execute()
-            {
-            throw new NotImplementedException(
-              "You should not execute Raycaster via execute() calling, but Render(int width, int height) " );
-            }
+        {
+            throw new NotImplementedException("You should not execute Raycaster via execute() calling, but Render(int width, int height) " );
+        }
 
         public void Setup( int width, int height )
-            {
-            int dataWidth  = mDatasetManager.RenderingDataset.Data3D.Width;
+        {
+            int dataWidth = mDatasetManager.RenderingDataset.Data3D.Width;
             int dataHeight = mDatasetManager.RenderingDataset.Data3D.Height;
-            int dataDepth  = mDatasetManager.RenderingDataset.Data3D.Depth;
+            int dataDepth = mDatasetManager.RenderingDataset.Data3D.Depth;
 
             GL.Enable( EnableCap.DepthTest );
             GL.Enable( EnableCap.CullFace );
             GL.Enable( EnableCap.Texture2D );
             GL.Enable( EnableCap.Texture3DExt );
 
-            mBackSide  = new FrameBufferObject( width, height, TextureUnit.Texture0, "back" );
+            mBackSide = new FrameBufferObject( width, height, TextureUnit.Texture0, "back" );
             mFrontSide = new FrameBufferObject( width, height, TextureUnit.Texture1, "front" );
+            mTempFBO = new FrameBufferObject( width, height, TextureUnit.Texture4, "temp" );
 
             mVolumeTexture = new GlTexture3D( dataWidth, dataHeight, dataDepth );
-            mVolumeTexture.Load( dataWidth, dataHeight, dataDepth,
-                               mDatasetManager.RenderingDataset.Data3D.VolumeDataArray );
+            mVolumeTexture.Load( dataWidth, dataHeight, dataDepth, mDatasetManager.RenderingDataset.Data3D.VolumeDataArray );
 
             // create Load function for GLTexture1D
             mClassificationTexture = new GLTexture1D( mDatasetManager.RenderingDataset.LookUpTables[0].LUTData1D );
-            }
+        }
 
         public void Render()
-            {
-            if ( mOpenglControl != null )
-                {
+        {
+            if(mOpenglControl != null) {
                 mOpenglControl.Invalidate();
-                }
             }
+        }
 
         public void Render( int width, int height, GLControl glControl, float renderingStep )
-            {
+        {
             glControl.MakeCurrent();
 
             #region First run - FBO setup
 
-            if ( firstRun == true )
-                {
-                this.Setup( width, height );
-
-                mWidthOld = width;
-                mHeightOld = height;
+            if(firstRun == true) {
+                // this.Setup( glControl.Width, glControl.Height );
+                this.Setup( 333, 333 );
+                // mWidthOld = width;
+                // mHeightOld = height;
                 mOpenglControl = glControl;
 
                 firstRun = false;
-                }
+            }
 
             #endregion
 
             #region Resolution change detection
 
-            if ( ( width != mWidthOld ) || ( height != mHeightOld ) )
-                {
-                mBackSide.ChangeResolution( width, height, TextureUnit.Texture0, "back" );
-                mFrontSide.ChangeResolution( width, height, TextureUnit.Texture1, "front" );
-                }
+            //if((width != mWidthOld) || (height != mHeightOld)) {
+            //    mBackSide.ChangeResolution( width, height, TextureUnit.Texture0, "back" );
+            //    mFrontSide.ChangeResolution( width, height, TextureUnit.Texture1, "front" );
+            //}
 
             #endregion
 
@@ -224,14 +222,19 @@ namespace WpfOpenTK.OpenGL.Engine
             #endregion
 
             #region Projection Setup
-
             GL.Viewport( 0, 0, width, height ); // Use all of the glControl painting area
             GL.MatrixMode( MatrixMode.Projection );
             GL.LoadIdentity();
 
             float x = (float) width / height;
-            GL.Ortho( -x, x, -1.0, 1.0, 0.0, 5.0 );
-            GL.Ortho( -0.7, 0.7, -0.7, 0.7, 0, 5 );
+            //GL.Ortho( -x, x, -1.0, 1.0, 0.0, 5.0 );
+            //GL.Ortho( -0.7, 0.7, -0.7, 0.7, 0, 5 );
+            GL.Ortho( -1, 1, -1, 1, -50, 50 );
+
+
+            //GL.Ortho( 0, width, 0, height, -1, 1 ); // Bottom-left corner pixel has coordinate (0, 0)
+            //GL.Viewport( 0, 0, width, height );
+            //GL.Viewport( 0, 0, 222,222 );
 
             #endregion
 
@@ -257,7 +260,7 @@ namespace WpfOpenTK.OpenGL.Engine
             mBackSide.Attach();
             GL.Clear( ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
             DrawCube();
-            //backSide.Save( "back.bmp" );
+            //mBackSide.Save( "back.bmp" );
             mBackSide.Detach();
 
             #endregion
@@ -270,9 +273,8 @@ namespace WpfOpenTK.OpenGL.Engine
             //GL.ActiveTexture( TextureUnit.Texture1 );
             GL.Clear( ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
             DrawCube();
-            //frontSide.Save("front.bmp");
+            //mFrontSide.Save( "front.bmp" );
             mFrontSide.Detach();
-
             #endregion
 
             #region Prepare scene for Fullscreen textured rectangle - changed by GLSL shader
@@ -280,7 +282,7 @@ namespace WpfOpenTK.OpenGL.Engine
             GL.ClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
             GL.Clear( ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
             GL.LoadIdentity();
-            GL.Translate( -2.00 * width / height / 2, -2.0 / 2, -0.0 );
+            GL.Translate( -2.0 * width / height / 2, -2.0 / 2, -0.0 );
             GL.Disable( EnableCap.CullFace );
 
             #endregion
@@ -290,49 +292,51 @@ namespace WpfOpenTK.OpenGL.Engine
             // Draw fullscreen textured rectangle
 
             // Activate 3D texture
-
             GL.ActiveTexture( TextureUnit.Texture2 );
             this.mVolumeTexture.Bind();
-
+            
             GL.ActiveTexture( TextureUnit.Texture3 );
             this.mClassificationTexture.Bind();
-
+                     
             this.ShaderPrograms[0].Use();
             ShaderPrograms[0].SetUniform1( "backBuffer", 0 );
             ShaderPrograms[0].SetUniform1( "frontBuffer", 1 );
 
             //renderingStep = 0.001f;
 
-            foreach ( var shaderAlgorithmParameter in mRenderingParameters )
-                {
-                if ( shaderAlgorithmParameter.Value.GetType().Name == typeof( Vector3 ).Name )
-                    {
+            foreach(var shaderAlgorithmParameter in mRenderingParameters) {
+                if(shaderAlgorithmParameter.Value.GetType().Name == typeof( Vector3 ).Name) {
                     ShaderPrograms[0].SetUniform3(
                                          shaderAlgorithmParameter.Key.ToString(),
                                          (Vector3) shaderAlgorithmParameter.Value );
-                    }
-                else
-                    {
+                }
+                else {
                     ShaderPrograms[0].SetUniform1(
                                         shaderAlgorithmParameter.Key.ToString(),
                                         (float) shaderAlgorithmParameter.Value );
-                    }
                 }
+            }
 
             //ShaderPrograms[0].SetUniform3( RenderingParameter.AmbientLightColor.ToString(),
             //                               (Vector3) mRenderingParameters[RenderingParameter.AmbientLightColor] );
 
             ShaderPrograms[0].SetUniform1( "delta", renderingStep );
-            ShaderPrograms[0].SetUniform1( "classificationTexture", 3 );
+            ShaderPrograms[0].SetUniform1( "color_text", 3 );
 
-            //DrawCube();
+            ////DrawCube();
             mFrontSide.BindTextureToTextureUnit();
             mBackSide.BindTextureToTextureUnit();
 
-            FullScreenArea( width, height );
+            //mTempFBO.Attach();
+
+            FullScreenArea( 100, 100 );
+            //       FullScreenArea( width, height );
+
             ShaderPrograms[0].SetUniform1( "volume", 2 );
             GL.UseProgram( 0 );
-
+            //mTempFBO.Save( "fbo.bmp" );
+            //mTempFBO.Detach();
+            
             GL.ActiveTexture( TextureUnit.Texture2 );
             this.mVolumeTexture.Unbind();
 
@@ -341,51 +345,77 @@ namespace WpfOpenTK.OpenGL.Engine
 
             GL.ActiveTexture( TextureUnit.Texture0 );
             GL.BindTexture( TextureTarget.Texture2D, 0 );
+            
             GL.ActiveTexture( TextureUnit.Texture1 );
             GL.BindTexture( TextureTarget.Texture2D, 0 );
 
-            #endregion
+            GL.ActiveTexture( TextureUnit.Texture3 );
+            GL.BindTexture( TextureTarget.Texture1D, 0 );
 
+
+            #endregion
+            
             #region remove
+            //GL.Viewport( 0, 0, 400, 400); // Use all of the glControl painting area
+            //GL.MatrixMode( MatrixMode.Projection );
+            //GL.LoadIdentity();
+            //GL.Ortho( -1, 1, -1, 1, -50, 50 );
+            //////FullScreenArea( width, height );
 
-            // GL.Enable( EnableCap.DepthTest );
-            GL.Enable( EnableCap.Blend );
-            GL.BlendFunc( BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha );
-            // GL.Enable(EnableCap.AlphaTest);
+            ////// GL.Enable( EnableCap.DepthTest );
+            ////GL.Enable( EnableCap.Blend );
+            ////GL.BlendFunc( BlendingFactorSrc.SrcAlpha, BlendingFactorDest.OneMinusSrcAlpha );
+            ////// GL.Enable(EnableCap.AlphaTest);
 
-            GL.PushMatrix();
-            GL.LoadIdentity();
-            GL.Translate( 0.1, 0.1, -3.1 );
-            //GL.Rotate( angle, 1, 1, 0 );
+            //GL.PushMatrix();
+            //GL.LoadIdentity();
+            ////GL.Translate( 0.5, 0.5, 0 );
+            ////GL.Rotate( angle, 1, 1, 0 );
 
-            GL.Begin( BeginMode.Triangles );
-            GL.Color4( 1.0, 0.5, 1.0, 0.3 );
-            GL.Vertex3( 0.1, 0.31, -5.0 );
-            GL.Vertex3( -0.13, 0.21, -5.0 );
-            GL.Vertex3( 0.23, 0.81, -5.0 );
+            //GL.ClearColor( 1.0f, 1.0f, 1.0f, 1.0f );
+            //GL.Clear( ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit );
+            //GL.ActiveTexture( TextureUnit.Texture0 );
+            //GL.BindTexture( TextureTarget.Texture2D, mTempFBO.mFboTexture );
+                      
+            //GL.Begin( BeginMode.Quads );
+            //GL.Color4( 1.0, 1.0, 1.0, 1.0); // fixme:: jeden pes je zakopany aj tu
+            
+            ////GL.Vertex3( 0.1, 0.31, 0.0 );
+            ////GL.Vertex3( -0.13, 0.21, 0.0 );
+            ////GL.Vertex3( 0.23, 0.81, -0.0 );
+                        
+            //GL.TexCoord2( 0.0, 0.0 ); GL.Vertex2( 0.0, 0.0 );
+            //GL.TexCoord2( 1.0, 0.0 ); GL.Vertex2( 1.0, 0.0 );
+            //GL.TexCoord2( 1.0, 1.0 ); GL.Vertex2( 1.0, 1.0 );
+            //GL.TexCoord2( 0.0, 1.0 ); GL.Vertex2( 0.0, 1.0 );
+ 
+            //GL.End();
+            //GL.BindTexture( TextureTarget.Texture2D, 0 );
+            
 
-            GL.End();
-            GL.Disable( EnableCap.Blend );
-            GL.PopMatrix();
-
+            ////GL.Disable( EnableCap.Blend );
+            //GL.PopMatrix();
+            
             #endregion
+            
 
-            mWidthOld  = width;
+            mWidthOld = width;
             mHeightOld = height;
-            }
+        }
 
         private void FullScreenArea( int width, int height )
-            {
+        {
             int W = width, H = height;
 
-            double x = (double) 2.0 * W / H;
-            double y = (double) 2.0;
+            double x = (double) 2.0 * W / H / 1.0;
+            double y = (double) 2.0 / 1.0;
 
             GL.Disable( EnableCap.DepthTest );
+            
             GL.Begin( BeginMode.Quads );
 
             //    glTexCoord2f(0,0);
-            GL.Color3( 0.5, 0.2, 0.9 );
+            GL.Color3( 0.0, 0.0, 0.0 );
 
             GL.MultiTexCoord4( TextureUnit.Texture0, 0.0, 0.0, 0.0, 0.0 );
             GL.MultiTexCoord4( TextureUnit.Texture1, 0.0, 0.0, 0.0, 0.0 );
@@ -407,77 +437,76 @@ namespace WpfOpenTK.OpenGL.Engine
             GL.Vertex2( 0, y );
 
             GL.End();
-            }
+        }
 
         public void RotateXYZ()
-            {
+        {
             mAngle += 2.5f;
-            }
+        }
 
         public void GrapScreenshot()
-            {
-            if ( mOpenglControl != null )
-                {
+        {
+            if(mOpenglControl != null) {
                 var screen = mOpenglControl.GrabScreenshot();
 
                 var screenshots = from file in Directory.GetFiles( ".", "*.bmp" )
                                   select file;
 
-                screen.Save( ( screenshots.Count()+1 ).ToString() + ".bmp" );
-                }
+                screen.Save( (screenshots.Count() + 1).ToString() + ".bmp" );
             }
+        }
 
         // Private Methods (2) 
 
         #region Utility functions
 
         private void ColorVector( float x, float y, float z )
-            {
+        {
             const double correction = 0.5f;
             GL.Color4( x + correction, y + correction, z + correction, 1.0 );
             GL.Vertex3( x, y, z );
-            }
+        }
 
         public void DrawCube()
-            {
+        {
             //float length = 1.0f;
             System.Configuration.AppSettingsReader configurationAppSettings = new System.Configuration.AppSettingsReader();
             string renderCubeSideLength = (string) configurationAppSettings.GetValue( "RenderCubeSideLength", typeof( string ) );
             float length = float.Parse( renderCubeSideLength );
 
-            float k      = 1.0f;
+            float k = 1.0f;
 
             GL.Begin( BeginMode.Quads );
 
             // Front Side
             this.ColorVector( -length, -length, +length );
-            this.ColorVector( +k*length, -length, +length );
-            this.ColorVector( +k*length, +length, +length );
+            this.ColorVector( +k * length, -length, +length );
+            this.ColorVector( +k * length, +length, +length );
             this.ColorVector( -length, +length, +length );
 
             // Back Side
             this.ColorVector( -length, -length, -length );
             this.ColorVector( -length, +length, -length );
-            this.ColorVector( +k*length, +length, -length );
-            this.ColorVector( +k*length, -length, -length );
+            this.ColorVector( +k * length, +length, -length );
+            this.ColorVector( +k * length, -length, -length );
 
             // Top Side
             this.ColorVector( -length, +length, -length );
             this.ColorVector( -length, +length, +length );
-            this.ColorVector( +k*length, +length, +length );
-            this.ColorVector( +k*length, +length, -length );
+            this.ColorVector( +k * length, +length, +length );
+            this.ColorVector( +k * length, +length, -length );
 
             // Bottom Side
             this.ColorVector( -length, -length, -length );
-            this.ColorVector( +k*length, -length, -length );
-            this.ColorVector( +k*length, -length, +length );
+            this.ColorVector( +k * length, -length, -length );
+            this.ColorVector( +k * length, -length, +length );
             this.ColorVector( -length, -length, +length );
 
             // Right Side
-            this.ColorVector( +k*length, -length, -length );
-            this.ColorVector( +k*length, +length, -length );
-            this.ColorVector( +k*length, +length, +length );
-            this.ColorVector( +k*length, -length, +length );
+            this.ColorVector( +k * length, -length, -length );
+            this.ColorVector( +k * length, +length, -length );
+            this.ColorVector( +k * length, +length, +length );
+            this.ColorVector( +k * length, -length, +length );
 
             // Left Side
             this.ColorVector( -length, -length, -length );
@@ -554,15 +583,15 @@ namespace WpfOpenTK.OpenGL.Engine
             //this.ColorVector( -length, +length, -length );
 
             GL.End();
-            }
+        }
 
         #endregion
 
         private void LocateShaders()
-            {
+        {
             string directory = Directory.GetCurrentDirectory();
-            }
+        }
 
         #endregion Methods
-        }
     }
+}
