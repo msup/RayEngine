@@ -125,6 +125,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Managers\AnimationList.cs" />
     <Compile Include="Managers\DockManager.cs" />
     <Compile Include="Managers\DockWindow.cs" />
     <Compile Include="Managers\Manager.cs" />

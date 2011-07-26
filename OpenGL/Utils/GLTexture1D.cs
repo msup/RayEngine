@@ -51,6 +51,18 @@ namespace WpfOpenTK
             ErrorCode error = GL.GetError();
         }
 
+        /// <summary>
+        /// refactor this function to be general
+        /// </summary>
+        public void Bind_zDistance()
+        {
+            GL.ActiveTexture( TextureUnit.Texture4 );
+            GL.BindTexture( TextureTarget.Texture1D, m_texture );
+            GL.Enable( EnableCap.Texture1D );
+            ErrorCode error = GL.GetError();
+        }
+
+
         public void Unbind()
         {
             GL.ActiveTexture( TextureUnit.Texture3 );

@@ -16,6 +16,9 @@ namespace WpfOpenTK
 
         private AnimationManager animationManager = new AnimationManager();
         private IRenderEngine renderEngine = null;
+
+        public IRenderEngine GetRenderEngine { get { return renderEngine; } }
+        
         private ShaderManager shaderManager = null;
         private List<string> shaderList = null;
         private System.Timers.Timer renderProgressTimer = null;
@@ -48,22 +51,10 @@ namespace WpfOpenTK
             renderProgressTimer.Elapsed += new System.Timers.ElapsedEventHandler( renderProgressTimer_Elapsed );
             renderProgressTimer.AutoReset = false;
             // Set the Interval to 1000 milliseconds
-            renderProgressTimer.Interval = 1000;
-            renderProgressTimer.Enabled = false;
+            renderProgressTimer.Interval = 10;
+            renderProgressTimer.Enabled = true;
 
-            actRenderStep = 0;
-
-            //ts = delegate
-            //{
-            //    MethodInvoker updateIt = delegate
-            //    {
-            //        renderEngine.Render( 555, 555, this, renderingStep );
-            //        renderEngine.RotateXYZ();
-            //        SwapBuffers();
-            //    };
-            //    Invoke( updateIt );
-            //};
-                 
+            actRenderStep = 0;                 
         }
 
         private void renderProgressTimer_Elapsed( object sender, System.Timers.ElapsedEventArgs e )
@@ -78,11 +69,11 @@ namespace WpfOpenTK
             List<float> Steps = new List<float>()
                                     {
                                         0.1f,
-                                        //0.05f,
-                                        //0.01f,
-                                        //0.005f,
-                                        //0.001f,
-                                        //0.0008f,
+                                        0.05f,
+                                        0.01f,
+                                        0.005f,
+                                        0.001f,
+                                        0.0008f,
                                         //0.0004f,
                                         //0.00005f,
                                         ////0.0001f,
@@ -94,7 +85,7 @@ namespace WpfOpenTK
             renderingStep = Steps[actRenderStep];
             if(actRenderStep < Steps.Count - 1) {
                 actRenderStep += 1;
-                //renderProgressTimer.Interval = 750;
+                renderProgressTimer.Interval = 10;
                 var msg = "Render step: " + Steps[actRenderStep].ToString();
                 Trace.WriteLine( msg );
                 Invalidate();
@@ -241,11 +232,10 @@ namespace WpfOpenTK
         {
         
             Render( renderingStep );
-            //renderProgressTimer.Interval = 500;
+            renderProgressTimer.Interval = 50;
 
             //renderProgressTimer.Enabled = false;
-            //renderProgressTimer.Enabled = true; // FIXME: true to be working
-
+            renderProgressTimer.Enabled = true; // FIXME: true to be working
         }
 
         #endregion private methods

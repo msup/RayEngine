@@ -3,13 +3,13 @@ using NLog;
 using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK
-    {
+{
     public class GLTexture2D
-        {
+    {
         private uint m_texture = 0;
 
         private GLTexture2D( int width, int height, uint textureID )
-            {
+        {
             m_texture = textureID;
             uint FboHandle;
 
@@ -27,12 +27,11 @@ namespace WpfOpenTK
             #region error handling
 
             ErrorCode glError = GL.GetError();
-            if ( glError != ErrorCode.NoError )
-                {
+            if(glError != ErrorCode.NoError) {
                 Logger logger = LogManager.GetCurrentClassLogger();
                 logger.Error( glError.ToString() + "GL Texture2D - problem" );
                 throw new Exception( " GL Texture2D problem" );
-                }
+            }
 
             #endregion error handling
 
@@ -59,6 +58,6 @@ namespace WpfOpenTK
 
             GL.PopAttrib(); // restores GL.Viewport() parameters
             GL.Ext.BindFramebuffer( FramebufferTarget.FramebufferExt, 0 ); // return to visible framebuffer
-            }
         }
     }
+}

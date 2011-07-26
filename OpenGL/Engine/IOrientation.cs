@@ -1,6 +1,6 @@
 ﻿namespace WpfOpenTK.OpenGL.Engine
 {
-	interface IOrientation
+	public interface IOrientation
 	{
 		double xAxis
 		{
@@ -8,13 +8,13 @@
 			set;
 		}
 
-		double yAxis
+        double yAxis
 		{
 			get;
 			set;
 		}
 
-		double zAxis
+        double zAxis
 		{
 			get;
 			set;

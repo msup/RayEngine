@@ -19,6 +19,7 @@ namespace WpfOpenTK
 		private WindowManager wm = null;
 		private RenderWindowManager rwm = null;
 		private DatasetManager dsm = null;
+        private AnimationManager anim_man = null;
 
 		public List<String> Plugins
 		{
@@ -32,11 +33,12 @@ namespace WpfOpenTK
 			}
 		}
 
-		public PluginManager( WindowManager wm, RenderWindowManager rwm, DatasetManager dsm )
+		public PluginManager( WindowManager wm, RenderWindowManager rwm, DatasetManager dsm, AnimationManager anim_man )
 		{
-			this.wm = wm;
+			this.wm  = wm;
 			this.rwm = rwm;
 			this.dsm = dsm;
+            this.anim_man = anim_man;
 		}
 
 		public bool loadPluginList( string Path )
@@ -98,9 +100,9 @@ namespace WpfOpenTK
 				// create an instance of rendering plugin
 				//IRenderEngine tplugin = Activator.CreateInstance( PluginClass ) as IRenderEngine;
 
-				IRenderEngine tplugin = (IRenderEngine) new RayCaster( dsm );
+				IRenderEngine tplugin = (IRenderEngine) new RayCaster( dsm, anim_man );
 
-				ModelOrientationControl orientationControl = new ModelOrientationControl( tplugin );
+				ModelOrientationControl orientationControl = new ModelOrientationControl(tplugin,wm);
 				var dockPane = new DockablePane();
 
 				dockPane.Items.Add( new DockableContent()

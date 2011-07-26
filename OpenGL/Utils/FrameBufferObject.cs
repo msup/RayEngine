@@ -99,9 +99,9 @@ namespace WpfOpenTK.OpenGL.Utils
 
             GL.ReadBuffer( (ReadBufferMode) FramebufferAttachment.ColorAttachment0Ext ); // Set up where to read the pixels from.
 
-            GL.ReadPixels( 0, 0, mWidth, mHeight, OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, data.Scan0 );
+            GL.ReadPixels( 0, 0, mWidth, mHeight, OpenTK.Graphics.OpenGL.PixelFormat.AbgrExt, PixelType.UnsignedByte, data.Scan0 );
             // Read the pixels into the bitmap.
-
+            
             Detach();
 
             GL.ReadBuffer( ReadBufferMode.Back );

@@ -38,11 +38,16 @@ namespace Data
 			LookupTable lut = new LookupTable();
             lut.Load();
             lut.Load( "lut1.png" );
-            
+
+            var lut_z_distance = new LookupTable();
+            lut_z_distance.Load( "lut_zdistance.png" );
+
 			if ( lstLookUpTables == null )
 				lstLookUpTables = new List<LookupTable>();
 
 			lstLookUpTables.Add( lut );
+            lstLookUpTables.Add( lut_z_distance );
+
 		}
 
 		public void Load()

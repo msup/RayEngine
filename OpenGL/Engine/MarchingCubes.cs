@@ -21,6 +21,9 @@ namespace WpfOpenTK.OpenGL.Engine
 
 		#region IRenderEngine Members
 
+        public void Render()
+        { }
+
 		public void Render( int width, int height, OpenTK.GLControl glControl, float renderingStep )
 		{
 			angle += 0.5;

@@ -21,7 +21,7 @@ namespace WpfOpenTK
 		private LoggingManager lm       = null;
 		private WindowManager wm        = null;
 		private PluginManager pm        = null;
-
+        private AnimationManager anim_manager = null;
 		#endregion private fields - managers
 
 		#region Constructors
@@ -35,13 +35,15 @@ namespace WpfOpenTK
 
 			lm = new LoggingManager();
 
+            anim_manager = new AnimationManager();
+
 			wm  = new WindowManager( RibbonBar, StatusBar, DockWindow, DockingWindowsManager );
 
 			rwm = new RenderWindowManager();
 
 			dsm = new DatasetManager();
 
-			pm  = new PluginManager( this.wm, this.rwm, this.dsm );
+			pm  = new PluginManager( this.wm, this.rwm, this.dsm, this.anim_manager );
 
 			pm.loadPluginList( Directory.GetCurrentDirectory() );
 		}

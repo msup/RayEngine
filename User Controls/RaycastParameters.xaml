@@ -14,7 +14,7 @@
 		<Label Content="Opacity correction:" Height="28" HorizontalAlignment="Left" Margin="12,46,0,0" Name="labOpacityCorrection" VerticalAlignment="Top" />
 		<Label Content="Low opacity step multiplication:" Height="28" HorizontalAlignment="Left" Margin="12,80,0,0" Name="labLowOpacityStepMultiplication" VerticalAlignment="Top" />
 		<Label Content="Low opacity threshold:" Height="28" HorizontalAlignment="Left" Margin="12,114,0,0" Name="labLowOpacityThreshold" VerticalAlignment="Top" />
-		<Label Content="Final lightness correction:" Height="28" HorizontalAlignment="Left" Margin="12,148,0,0" Name="labFinalLightnessCorrection" VerticalAlignment="Top" Width="177" />
+		<Label Content="Final  brightness correction:" Height="28" HorizontalAlignment="Left" Margin="12,148,0,0" Name="labFinalLightnessCorrection" VerticalAlignment="Top" Width="177" />
 		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,17,0,0" Name="slider1" VerticalAlignment="Top" Width="127" />
 		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,51,0,0" Name="slider2" VerticalAlignment="Top" Width="127" />
 		<Slider Grid.Column="1" Height="23" HorizontalAlignment="Left" Margin="10,114,0,0" Name="slider3" VerticalAlignment="Top" Width="127" />

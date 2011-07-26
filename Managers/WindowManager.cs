@@ -15,7 +15,10 @@ namespace WpfOpenTK
 		private StatusBar statusBar = null;
 		private TabControl tabControl = null;
 		private DockingManager dockingManager = null;
-		////  private List<OpenGLWindow> lstGlWindows = new List<OpenGLWindow>();
+        private RenderWindowManager rwm = null;
+
+        public RenderWindowManager GetRenderWindowManager { get { return rwm; } }
+        ////  private List<OpenGLWindow> lstGlWindows = new List<OpenGLWindow>();
 		//  private List<string> lstShadersPaths = new List<string>();
 
 		#endregion Fields
@@ -66,6 +69,8 @@ namespace WpfOpenTK
 
 		public void Register( RenderWindowManager rwm )
 		{
+            this.rwm = rwm;
+
 			//var tabItem = new TabItem();
 			//tabItem.Header = "Pokus";
 
