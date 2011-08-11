@@ -17,8 +17,8 @@ namespace WpfOpenTK
             GL.ActiveTexture( TextureUnit.Texture3 );
 
             GL.BindTexture( TextureTarget.Texture1D, m_texture );
-            GL.TexParameter( TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Nearest );
-            GL.TexParameter( TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Nearest );
+            GL.TexParameter( TextureTarget.Texture1D, TextureParameterName.TextureMinFilter, (int) TextureMinFilter.Linear );
+            GL.TexParameter( TextureTarget.Texture1D, TextureParameterName.TextureMagFilter, (int) TextureMagFilter.Linear );
             GL.TexParameter( TextureTarget.Texture1D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Clamp );
             GL.TexParameter( TextureTarget.Texture1D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.Clamp );
 
@@ -27,7 +27,7 @@ namespace WpfOpenTK
 
             GL.TexImage1D( TextureTarget.Texture1D,
                        0,
-                       PixelInternalFormat.Rgba8,
+                       PixelInternalFormat.Rgba,
                        width,
                        0,
                        PixelFormat.Rgba,

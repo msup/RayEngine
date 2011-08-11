@@ -15,7 +15,11 @@ vec3 norm_dir = normalize(dir);
 vec3 vec = start;
 
 float len = length(dir.xyz);
-float delta = 0.0005*10;
+float delta = 0.0004;
+
+bool first_edge_detected = false;
+float acc_alpha_before = 0.0;
+float acc_alpha_after = 0.0;
 
 vec3  delta_dir = norm_dir * delta;
 float delta_dir_len = length(delta_dir);
@@ -74,10 +78,12 @@ vec3 Lighting (
 
      lightDir = normalize(lightDir);
 		 
-     float i = clamp(dot(lightDir,vNormal), 0.0, 1.0);
+     float i = clamp(dot(lightDir,vNormal), -1.0, 1.0);
 
      vec3 h = normalize(lightDir - vViewDir);
      float j = pow( clamp( dot( vNormal,h),0.0,1.0), 8.0);
+	 
+	 return clamp((i*vec3(0.7,0.7,0.7)+j*vec3(0.0,0.5,0.5) + 0.1*BeckmannColor*M),0.0,1.0);
 	 
 	 if (length_acc < 0.25)
 		return clamp((i*vec3(0.7,0.7,0.7)+j*vec3(0.0,0.5,0.5)+length_acc*BeckmannColor*M),0.0,1.0);
@@ -97,14 +103,14 @@ vec3 ComputeNormal (vec3 vHitPosTex)
 {
     // TODO: check the blue channel when volume data structure changed
 
-    float fVolumValXp = texture3D(volume, vHitPosTex+vec3(+vVoxelStepsize.x,0,0)).b;
-    float fVolumValXm = texture3D(volume, vHitPosTex+vec3(-vVoxelStepsize.x,0,0)).b;
+    float fVolumValXp = texture3D(volume, 0.0001+vHitPosTex+vec3(+vVoxelStepsize.x,0,0)).b;
+    float fVolumValXm = texture3D(volume, -0.0001+vHitPosTex+vec3(-vVoxelStepsize.x,0,0)).b;
 
-    float fVolumValYp = texture3D(volume, vHitPosTex+vec3(0,-vVoxelStepsize.y,0)).b;
-    float fVolumValYm = texture3D(volume, vHitPosTex+vec3(0,+vVoxelStepsize.y,0)).b;
+    float fVolumValYp = texture3D(volume, 0.0001+vHitPosTex+vec3(0,-vVoxelStepsize.y,0)).b;
+    float fVolumValYm = texture3D(volume, -0.0001+vHitPosTex+vec3(0,+vVoxelStepsize.y,0)).b;
 
-    float fVolumValZp = texture3D(volume, vHitPosTex+vec3(0,0,+vVoxelStepsize.z)).b;
-    float fVolumValZm = texture3D(volume, vHitPosTex+vec3(0,0,-vVoxelStepsize.z)).b;
+    float fVolumValZp = texture3D(volume, 0.0001+vHitPosTex+vec3(0,0,+vVoxelStepsize.z)).b;
+    float fVolumValZm = texture3D(volume, -0.0001+vHitPosTex+vec3(0,0,-vVoxelStepsize.z)).b;
 
     vec3  vGradient  = vec3((fVolumValXm-fVolumValXp), (fVolumValYp-fVolumValYm), (fVolumValZm-fVolumValZp));
 
@@ -122,6 +128,7 @@ vec4 Classify (vec4 color_sample)
     float sample = color_sample.b;
     vec4 color   = vec4(0);
 	
+	/*
 	if ((sample >= 0.4) && (sample <= 0.5))
     {
         float D = 200/255.0;
@@ -144,14 +151,37 @@ vec4 Classify (vec4 color_sample)
 	{
 	color = vec4(0.0,0.0,0.0,0.00);
 	}
-
-    color = texture1D( color_text, sample);	
- 	
-	color = vec4(0);
-	if (sample >= 0.7 && sample <= 1.0)
-		color = vec4(0.95,0.8,0,0.8);
+	*/
+    
+	color = vec4(0.0);
+	if (sample > 0.28 && sample < 0.5)
+		color = vec4(0.95,0.9,0.9,0.03);
+	if (sample > 0.42 && sample < 0.43)
+		color = vec4(0.8,0.0,0.2,0.3);
+	if (sample > 0.44 && sample < 0.47)
+		color = vec4(0.8,0.0,0.9,0.5);
+			
+	color = texture1D( color_text, sample);	 
 	
 	return color;
+}
+
+vec4 classify_z_distance(float distance)
+{
+vec4 color = vec4(0.0);
+
+if (distance < 0.05)
+	color = vec4(0.8,0.0,0.0,0.0);
+else if (distance > 0.1 && distance < 0.12)
+	color = vec4(0.8,0.0,0.8,0.75);
+else if (distance > 0.12 && distance < 0.14)
+	color = vec4(0.0,0.8,0.8,0.75);
+else if (distance > 0.14 && distance < 0.23)
+	color = vec4(0.5,0.5,0.9,0.75);
+else  
+	color = vec4(0.8,0.0,1.0,0.75);
+
+return color;
 }
 
 float skip_delta_low_alpha = delta;
@@ -160,7 +190,8 @@ vec4 target_color = vec4(0.0);
 
 void main()
 {	
-	float k_alpha = 10;
+/*
+	float k_alpha = 1;
 
 	vec4 color_sample_00 = texture3D(volume,start + 0.0*delta_dir*k_alpha);
 		 color_sample_00 = Classify (color_sample_00);
@@ -185,13 +216,18 @@ void main()
 	else if ((k_limit*color_sample_20.a >= color_sample_15.a))
 		{
 		target_color = vec4(0.0,1.0,0.0,0.5);
-		//vec = start + k_alpha * delta * 0.15 / 2;		
+		vec = start + k_alpha * delta * 0.15 / 2;		
 		}
 	else if ((k_limit*color_sample_35.a >= color_sample_20.a))
 		{
 		target_color = vec4(0.0,0.0,1.0,0.5);
 		vec = start + k_alpha * delta * 0.20 / 2;
 		}
+*/
+/*		float threshold = 0.4;
+	if (color_sample_05.a > threshold )
+		discard;
+	*/
 		
 	if (start == stop)
 		{
@@ -199,13 +235,13 @@ void main()
 		discard;
 		}
 	
-	for (int i = 0; i < 1.0/delta + 1; i++)
+	//for (int i = 0; i < 1.0/delta + 1; i++)
+	for (int i = 0; i < 3000; i++)
 	{
 		color_sample = texture3D(volume,vec);
 		color_sample = Classify (color_sample);
-		
-		//color_sample.rgb = texture1D( z_distance_texture, 1-vec.z ).rgb;
-	
+		color_sample.rgb += 0.1*Lighting (vec, ComputeNormal(vec), AmbientLightColor, vLightDiffuse, vLightSpecular, length_acc);
+	 				
 		vec += delta_dir;
 		length_acc += delta_dir_len;
 		
@@ -214,50 +250,88 @@ void main()
 			
  		//color_sample.a *=  0.89;				
 		
-		if (color_sample.a > 0.5)
-			color_sample.a = 1.00 - pow(1.0 - color_sample.a, delta * 5000);
-					
+		//if (color_sample.a < 0.4)
+		//color_sample.a *= 0.01;
+			
+		
+	//if (color_sample.a > 0.2)
+		color_sample.a = 1.00 - pow(1.0 - color_sample.a, delta * 800);
+	//else
+		//color_sample.a /= 30.0;
+	
+		color_sample.a *= 1.2;
+	
+		acc_alpha_before = acc_alpha_after;
+		acc_alpha_after = color_sample.a;
+		
+		/*
+		if ((abs(acc_alpha_after) > 0.1) && first_edge_detected==false)
+		{
+		first_edge_detected = true;
+		vec -= 1*delta_dir;
+		vec = start; // + 0.9*(length_acc)*delta_dir;
+		delta_dir = norm_dir * 0.0001 ;			
+		} */
+		
+		//color_sample.a = 1.0 - pow((1.0 - color_sample.a),2.0);
+		
 		dst.rgb = dst.rgb + (1.0 - dst.a) * color_sample.a * color_sample.rgb;
 		dst.a   = dst.a   + (1.0 - dst.a) * color_sample.a;
 		
 		if (color_sample.a > 0.8)
-			dst.a *= 1.00;
-		
-		//if (dst.a > 0.1)
+			dst.a *= 1.0;
+				
+		//if (dst.a > 0.4)
 		//    delta_dir = norm_dir * delta/2;
 				
+		//gl_FragDepth = length(vec);
+    	gl_FragDepth = 1.0 - dst.a;
+		
 		// vzdialenostnu transformaciu k prvemu okraju / hrane pre potreby akceleracie
-		 // ----------------- early stopping criteria ------------
-  		if ( dst.a >= 0.99)
-		break;
+		// ----------------- early stopping criteria ------------
+  		if ( dst.a >= 0.999)
+			break;
 
 		if (vec.x > 1.0f || vec.y > 1.0f || vec.z > 1.0f )
             break;
-	}	
-		
+	}		
+	 
 	//normalize(ComputeNormal(vec));
-		
-	if (dst.a > 0.5 )
+	if (dst.a > 0.99)
+		dst.a *= 1.0;
+	else if (dst.a < 0.1)
+		dst.a *= 1.0;
+			
+	
+	if (dst.a > 0.8)
 	{
-	  dst.rgb += 0.7*Lighting (vec, ComputeNormal(vec), AmbientLightColor, vLightDiffuse, vLightSpecular, length_acc);
+	  dst.rgb += 0.8*Lighting (vec, ComputeNormal(vec), AmbientLightColor, vLightDiffuse, vLightSpecular, length_acc);
 	  dst.rgb = clamp(dst.rgb,0.0,1.0);
 	}
 		
-	if (length(dst.rgb) < 0.5 && dst.a < 0.2)
-		dst.a = 0;
+	//if (length(dst.rgb) < 0.5 && dst.a < 0.2)
+	//dst.a = 0;
+		
+	//dst.rgb = 1*texture1D( z_distance_texture, length_acc).rgb;
+	
+	//dst.rgb = 0.1*texture1D( z_distance_texture, vec.z*0.1).rgb;
+	
 	
 	gl_FragColor = dst;
 	
 	vec4 frontColor = vec4( dst.r,dst.g,dst.b,dst.a);
-    vec4 texColor = vec4(0.0,0.0,0.35,0.8);
+    vec4 texColor = vec4(1.,1.0,1.0,0.2);
 	//texColor = target_color;
 	
-    gl_FragColor.rgb = frontColor.a * frontColor.rgb + (1.0 - frontColor.a) * texColor.rgb;
+	frontColor += 0.2*classify_z_distance(vec.z);
+	//frontColor.rgb *= texture1D( z_distance_texture, vec.z*2+0.5).rgb;
+	
+	
+	gl_FragColor.rgb = frontColor.a * frontColor.rgb + (1.0 - frontColor.a) * texColor.rgb;
     gl_FragColor.a = frontColor.a + (1.0 - frontColor.a) * texColor.a;
 	
 	//gl_FragColor += target_color;
 	
-		
-	//gl_FragDepth = 10*length_acc;
+	//gl_FragColor.rgba = vec4(length(vec),0.5,0.5,0.5);
 	 
 }

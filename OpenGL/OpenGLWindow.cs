@@ -51,8 +51,8 @@ namespace WpfOpenTK
             renderProgressTimer.Elapsed += new System.Timers.ElapsedEventHandler( renderProgressTimer_Elapsed );
             renderProgressTimer.AutoReset = false;
             // Set the Interval to 1000 milliseconds
-            renderProgressTimer.Interval = 10;
-            renderProgressTimer.Enabled = true;
+            //renderProgressTimer.Interval = 10;
+            //renderProgressTimer.Enabled = true;
 
             actRenderStep = 0;                 
         }
@@ -69,11 +69,11 @@ namespace WpfOpenTK
             List<float> Steps = new List<float>()
                                     {
                                         0.1f,
-                                        0.05f,
-                                        0.01f,
-                                        0.005f,
-                                        0.001f,
-                                        0.0008f,
+                                        //0.05f,
+                                        //0.01f,
+                                        //0.005f,
+                                        //0.001f,
+                                        //0.0008f,
                                         //0.0004f,
                                         //0.00005f,
                                         ////0.0001f,
@@ -97,7 +97,7 @@ namespace WpfOpenTK
             lock(this) {
 
                 //renderEngine.Render( Width,Height, this, renderingStep );
-                renderEngine.Render( 333, 333, this, renderingStep );
+                renderEngine.Render( 555, 555, this, renderingStep );
                 renderEngine.RotateXYZ();
                 SwapBuffers();
 

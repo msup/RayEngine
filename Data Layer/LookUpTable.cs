@@ -23,7 +23,7 @@ namespace Data
             bool retValue = false;
             Bitmap image = new Bitmap( fileName );
 
-            LUTdata1D = new uint[256];
+            LUTdata1D = new uint[image.Width];
             for(int x = 0; x < image.Width; x++) {
                 Color pixelColor = image.GetPixel( x, 0 );
                 LUTdata1D[x] = (uint) ((pixelColor.R << 24) |

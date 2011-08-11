@@ -7,6 +7,8 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using Plugin;
 using WpfOpenTK.OpenGL.Utils;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace WpfOpenTK.OpenGL.Engine
 {
@@ -19,6 +21,7 @@ namespace WpfOpenTK.OpenGL.Engine
 
         int mWidthOld = 0;
         int mHeightOld = 0;
+        int mWidth = 0, mHeight = 0;
         //private float mAngleX = 0.0f;
         //private float mAngleY = 0.0f;
         //private float mAngleZ = 0.0f;
@@ -26,6 +29,7 @@ namespace WpfOpenTK.OpenGL.Engine
         private float mAngle = 1.5f;
         private static int counter = 0;
 
+        public bool offline_render { get; set; }
 
         DatasetManager mDatasetManager = null;
         FrameBufferObject mBackSide = null;
@@ -97,6 +101,7 @@ namespace WpfOpenTK.OpenGL.Engine
             LocateShaders();
 
             this.mDatasetManager = datasetManager;
+            offline_render = false;
         }
 
         public RayCaster(DatasetManager datasetManager, AnimationManager anim_man)
@@ -144,6 +149,9 @@ namespace WpfOpenTK.OpenGL.Engine
 
         public void Setup(int width, int height)
         {
+            mWidth = width;
+            mHeight = height;
+
             int dataWidth = mDatasetManager.RenderingDataset.Data3D.Width;
             int dataHeight = mDatasetManager.RenderingDataset.Data3D.Height;
             int dataDepth = mDatasetManager.RenderingDataset.Data3D.Depth;
@@ -171,7 +179,7 @@ namespace WpfOpenTK.OpenGL.Engine
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
 
-            GL.Translate(0.1, 0.1, TranslateZ);
+            GL.Translate(0.1, 0.1, 0);
             GL.Rotate(AngleX, 1, 0, 0);
             GL.Rotate(AngleY, 0, 1, 0);
             GL.Rotate(AngleZ, 0, 0, 1);
@@ -197,7 +205,7 @@ namespace WpfOpenTK.OpenGL.Engine
             if (firstRun == true)
             {
                 // this.Setup( glControl.Width, glControl.Height );
-                this.Setup(444, 444);
+                this.Setup(555, 555);
                 // mWidthOld = width;
                 // mHeightOld = height;
                 mOpenglControl = glControl;
@@ -226,14 +234,18 @@ namespace WpfOpenTK.OpenGL.Engine
             #endregion
 
             #region Projection Setup
-            GL.Viewport(0, 0, 444, 444); // Use all of the glControl painting area
+
+
+            GL.Viewport(0, 0,555, 555); // Use all of the glControl painting area
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadIdentity();
 
             float x = (float)width / height;
             //GL.Ortho( -x, x, -1.0, 1.0, 0.0, 5.0 );
             //GL.Ortho( -0.7, 0.7, -0.7, 0.7, 0, 5 );
-            GL.Ortho(-1, 1, -1, 1, -50, 50);
+            //GL.Ortho(-x,x,-x,x, -50, 50);
+            GL.Ortho(-1.50, 1.50, -1.50, 1.50, -5, 10);
+            //GL.Frustum(-50, 50, -50, 50, -1, 100);
 
 
             //GL.Ortho( 0, width, 0, height, -1, 1 ); // Bottom-left corner pixel has coordinate (0, 0)
@@ -256,7 +268,7 @@ namespace WpfOpenTK.OpenGL.Engine
             mBackSide.Attach();
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             DrawCube();
-            //mBackSide.Save( "back.bmp" );
+            mBackSide.Save("back.bmp");
             mBackSide.Detach();
 
             #endregion
@@ -278,7 +290,7 @@ namespace WpfOpenTK.OpenGL.Engine
             GL.ClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.LoadIdentity();
-            GL.Translate(-2.0 * width / height / 2, -2.0 / 2, -0.0);
+            GL.Translate(-3.0 * width / height / 2, -3.0 / 2, 0.0);
             GL.Disable(EnableCap.CullFace);
 
             #endregion
@@ -330,18 +342,24 @@ namespace WpfOpenTK.OpenGL.Engine
             mFrontSide.BindTextureToTextureUnit();
             mBackSide.BindTextureToTextureUnit();
 
-            mTempFBO.Attach();
+            if (offline_render)
+            {
+                mTempFBO.Attach();
+            }
 
-            FullScreenArea(111,111);
+            FullScreenArea(111, 111);
             //       FullScreenArea( width, height );
 
             ShaderPrograms[0].SetUniform1("volume", 2);
             GL.UseProgram(0);
 
-            counter++;
-            string fbo_bitmap_str = String.Format("{0}-fbo_save.bmp", counter);
-            mTempFBO.Save( fbo_bitmap_str );
-            mTempFBO.Detach();
+            if (offline_render)
+            {
+                counter++;
+                string fbo_bitmap_str = String.Format("{0}-fbo_save.bmp", counter);
+                mTempFBO.Save(fbo_bitmap_str);
+                mTempFBO.Detach();
+            }
 
             GL.ActiveTexture(TextureUnit.Texture2);
             this.mVolumeTexture.Unbind();
@@ -450,7 +468,7 @@ namespace WpfOpenTK.OpenGL.Engine
 
         public void RotateXYZ()
         {
-            mAngle += 2.5f;
+            //mAngle += 6.0f;
         }
 
         public void GrabScreenshot()
@@ -462,9 +480,53 @@ namespace WpfOpenTK.OpenGL.Engine
                 var screenshots = from file in Directory.GetFiles(".", "*.bmp")
                                   select file;
 
-                screen.Save((screenshots.Count() + 1).ToString() + ".bmp");
+                screen.Save((screenshots.Count() + 1).ToString() + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
             }
         }
+
+
+        public void Save(string fileName)
+        {
+            GL.Viewport(0, 0, mOpenglControl.Width, mOpenglControl.Height); // Use all of the glControl painting area
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
+
+            mTempFBO.Attach();
+
+            mTempFBO.Save(fileName);
+            mTempFBO.Detach();
+
+            var bitmap = new Bitmap(mOpenglControl.Width, mOpenglControl.Height);
+
+            BitmapData data = bitmap.LockBits(new Rectangle(0, 0, mOpenglControl.Width, mOpenglControl.Height),
+                                               ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            GL.ReadBuffer((ReadBufferMode)FramebufferAttachment.ColorAttachment0Ext); // Set up where to read the pixels from.
+
+            GL.ReadPixels(0, 0, mOpenglControl.Width, mOpenglControl.Height, OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedByte, data.Scan0);
+            // Read the pixels into the bitmap.
+
+            mTempFBO.Detach();
+
+
+            //uint[] pixs = new uint[mOpenglControl.Width*mOpenglControl.Height];
+            //GL.ReadPixels(0, 0, mOpenglControl.Width, mOpenglControl.Height, OpenTK.Graphics.OpenGL.PixelFormat.Rgba, PixelType.UnsignedInt8888, pixs);
+
+            GL.ReadBuffer(ReadBufferMode.Back);
+            // Set the read buffer to the back (I don't think this is necessary, but cleaning up is generally a good idea).
+
+            bitmap.UnlockBits(data); // Unlock the bitmap data.
+
+            try
+            {
+                bitmap.Save(fileName, ImageFormat.Bmp);
+            }
+            catch (Exception e)
+            {
+                // FIXME: Log this
+            }
+        }
+
 
         // Private Methods (2) 
 

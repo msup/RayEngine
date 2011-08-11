@@ -36,8 +36,10 @@ namespace Data
 			Data3D = new VolumetricData();
 
 			LookupTable lut = new LookupTable();
-            lut.Load();
-            lut.Load( "lut1.png" );
+            //lut.Load();
+            //lut.Load( "lut1.png" );
+            //lut.Load("lut_4096_8bit.png");
+            lut.Load("lut_1024_8bit_metaballs4.png");
 
             var lut_z_distance = new LookupTable();
             lut_z_distance.Load( "lut_zdistance.png" );

@@ -3,35 +3,36 @@ using NLog;
 using OpenTK.Graphics.OpenGL;
 
 namespace WpfOpenTK
-{
-    public class GLTexture2D
     {
+    public class GLTexture2D
+        {
         private uint m_texture = 0;
 
         private GLTexture2D( int width, int height, uint textureID )
-        {
+            {
             m_texture = textureID;
             uint FboHandle;
 
             GL.GenTextures( 1, out m_texture );
             GL.BindTexture( TextureTarget.Texture2D, m_texture );
             GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMinFilter,
-                            (int) TextureMinFilter.Nearest );
+                            (int) TextureMinFilter.Linear );
             GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureMagFilter,
-                            (int) TextureMagFilter.Nearest );
+                            (int) TextureMagFilter.Linear );
             GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Clamp );
             GL.TexParameter( TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int) TextureWrapMode.Clamp );
-            GL.TexImage2D( TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba8, width, height, 0, PixelFormat.Rgba,
+            GL.TexImage2D( TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba16f, width, height, 0, PixelFormat.Rgba,
                           PixelType.UnsignedByte, IntPtr.Zero );
 
             #region error handling
 
             ErrorCode glError = GL.GetError();
-            if(glError != ErrorCode.NoError) {
+            if ( glError != ErrorCode.NoError )
+                {
                 Logger logger = LogManager.GetCurrentClassLogger();
                 logger.Error( glError.ToString() + "GL Texture2D - problem" );
                 throw new Exception( " GL Texture2D problem" );
-            }
+                }
 
             #endregion error handling
 
@@ -58,6 +59,6 @@ namespace WpfOpenTK
 
             GL.PopAttrib(); // restores GL.Viewport() parameters
             GL.Ext.BindFramebuffer( FramebufferTarget.FramebufferExt, 0 ); // return to visible framebuffer
+            }
         }
     }
-}
